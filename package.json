@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/lepouya/ssba#readme",
   "dependencies": {
+    "phaser": "^3.11.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-router": "^4.3.1",
