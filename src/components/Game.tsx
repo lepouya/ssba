@@ -1,9 +1,9 @@
 import React from 'react';
-import { HashRouter, Link, Route, Switch } from 'react-router-dom';
-import bind from '../utils/bind';
+import { HashRouter, NavLink, Route, Switch } from 'react-router-dom';
 
 import Main from '../pages/Main';
 import Help from '../pages/Help';
+import bind from '../utils/bind';
 
 interface GameProps {
 }
@@ -50,25 +50,23 @@ export default class Game extends React.Component<GameProps, GameState> {
     return (
       <HashRouter>
         <div>
-          <header>
-            <div className="top-bar" id="navBar" style={{padding: 0}}>
-              <div className="top-bar-left">
-                <ul className="menu">
-                  <li><Link to="/">Main</Link></li>
-                  <li><Link to="/help">Help</Link></li>
-                </ul>
-              </div>
-              <div className="top-bar-right">
-                fps
-              </div>
+          <nav className="uk-navbar-container" uk-navbar="">
+            <div className="uk-navbar-left">
+              <ul className="uk-navbar-nav">
+                <li><NavLink activeClassName="uk-active" exact to="/">Main</NavLink></li>
+                <li><NavLink activeClassName="uk-active" to="/help">Help</NavLink></li>
+              </ul>
             </div>
-          </header>
-          <main>
-            <Switch>
-              <Route exact path="/" component={Main} />
-              <Route path="/help" component={Help} />
-            </Switch>
-          </main>
+            <div className="uk-navbar-right">
+              <ul className="uk-navbar-nav">
+                <li>fps</li>
+              </ul>
+            </div>
+          </nav>
+          <Switch>
+            <Route exact path="/" component={Main} />
+            <Route path="/help" component={Help} />
+          </Switch>
         </div>
       </HashRouter>
     );

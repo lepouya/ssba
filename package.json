@@ -21,11 +21,11 @@
   },
   "homepage": "https://github.com/lepouya/ssba#readme",
   "dependencies": {
-    "foundation-sites": "^6.5.0-rc.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-router": "^4.3.1",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "uikit": "^3.0.0-rc.9"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
@@ -34,6 +34,7 @@
     "@types/react-dom": "^16.0.6",
     "@types/react-router": "^4.0.29",
     "@types/react-router-dom": "^4.3.0",
+    "@types/uikit": "^2.27.6",
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",

@@ -1,4 +1,6 @@
-@import 'foundation';
+@import './styles/main';
+@import './styles/navbar';
 
-@import './styles/main.scss';
-@import './styles/tab-bar.scss';
+@import 'variables-theme';
+@import 'mixins-theme';
+@import 'uikit-theme';

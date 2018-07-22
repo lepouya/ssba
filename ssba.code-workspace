@@ -8,8 +8,10 @@
 		"cSpell.words": [
 			"crossorigin",
 			"gutil",
+			"mixins",
 			"ssba",
-			"tsify"
+			"tsify",
+			"uikit"
 		]
 	}
 }
