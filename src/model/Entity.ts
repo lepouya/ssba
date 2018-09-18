@@ -1,3 +1,5 @@
+import Ship from "./Ship";
+
 export default class Entity {
   public name: string;
 
@@ -63,6 +65,10 @@ export default class Entity {
     );
 
     switch (data.type || 'Entity') {
+      case 'Ship':
+        entity = new Ship(entity.id, entity.lastUpdated, entity.type);
+        break;
+        
       case 'Entity':
       default:
         break;
