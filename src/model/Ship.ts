@@ -1,14 +1,16 @@
 import Entity from "./Entity";
 import Component from "./Component";
+import Shape from "./Shape";
 
 export default class Ship extends Entity {
   public baseMass = 0.;
   public x = 0.;
   public y = 0.;
 
+  public shape = new Shape();
+
   public readonly components = new Set<Component>();
 
-  // size + shape?
   // center of mass
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
@@ -32,20 +34,27 @@ export default class Ship extends Entity {
     res.x = this.x;
     res.y = this.y;
 
+    res.shape = this.shape.save();
+
     if (this.components.size > 0) {
       res.components = Array.from(this.components)
-        .map(component => component.save())
+        .map(component => component.save());
     }
 
     return res;
   }
 
   load(data: any): Entity {
-    this.baseMass = data.mass || 0.;
+    this.baseMass = data.mass || this.baseMass;
 
-    this.x = data.x || 0.;
-    this.y = data.y || 0.;
+    this.x = data.x || this.x;
+    this.y = data.y || this.y;
 
+    if (data.shape) {
+      this.shape = Entity.loadNew(data.shape) as Shape;
+    }
+
+    this.components.clear();
     for (let component of data.components || []) {
       this.components.add(Entity.loadNew(component) as Component);
     }

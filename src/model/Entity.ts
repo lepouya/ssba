@@ -1,5 +1,6 @@
-import Ship from "./Ship";
 import Component from "./Component";
+import Shape from "./Shape";
+import Ship from "./Ship";
 
 export default class Entity {
   public name: string;
@@ -48,7 +49,7 @@ export default class Entity {
 
     if (this.children.size > 0) {
       res.children = Array.from(this.children)
-        .map(child => child.save())
+        .map(child => child.save());
     }
 
     if (this.parent) {
@@ -61,6 +62,7 @@ export default class Entity {
   load(data: any): Entity {
     this.name = data.name || this.name;
 
+    this.children.clear();
     for (let child of data.children || []) {
       this.children.add(Entity.loadNew(child));
     }
@@ -72,6 +74,14 @@ export default class Entity {
     let entity: Entity;
 
     switch (data.type || 'Entity') {
+      case 'Shape':
+        entity = new Shape(
+          data.id || undefined,
+          data.updated || undefined,
+          data.type || undefined,
+        );
+        break;
+
       case 'Component':
         entity = new Component(
           data.id || undefined,
