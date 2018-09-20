@@ -1,4 +1,5 @@
 import Ship from "./Ship";
+import Component from "./Component";
 
 export default class Entity {
   public name: string;
@@ -45,7 +46,11 @@ export default class Entity {
 
     res.name = this.name;
 
-    res.children = Array.from(this.children).map(child => child.save())
+    if (this.children.size > 0) {
+      res.children = Array.from(this.children)
+        .map(child => child.save())
+    }
+
     if (this.parent) {
       res.parent = this.parent.id;
     }
@@ -53,31 +58,44 @@ export default class Entity {
     return res;
   }
 
-  load(_: any): Entity {
+  load(data: any): Entity {
+    this.name = data.name || this.name;
+
+    for (let child of data.children || []) {
+      this.children.add(Entity.loadNew(child));
+    }
+
     return this;
   }
 
   static loadNew(data: any): Entity {
-    let entity = new Entity(
-      data.id || undefined,
-      data.updated || undefined,
-      data.type || undefined,
-    );
+    let entity: Entity;
 
     switch (data.type || 'Entity') {
-      case 'Ship':
-        entity = new Ship(entity.id, entity.lastUpdated, entity.type);
+      case 'Component':
+        entity = new Component(
+          data.id || undefined,
+          data.updated || undefined,
+          data.type || undefined,
+        );
         break;
-        
+
+      case 'Ship':
+        entity = new Ship(
+          data.id || undefined,
+          data.updated || undefined,
+          data.type || undefined,
+        );
+        break;
+
       case 'Entity':
       default:
+        entity = new Entity(
+          data.id || undefined,
+          data.updated || undefined,
+          data.type || undefined,
+        );
         break;
-    }
-
-    entity.name = data.name || entity.name;
-
-    for (let child of data.children || []) {
-      entity.children.add(Entity.loadNew(child));
     }
 
     return entity.load(data);
