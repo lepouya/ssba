@@ -12,7 +12,7 @@ export default class Entity {
     // Unique identifier for this entity
     public readonly id = Math.random().toString(36).substr(2, 9),
     // Last time vectors were calculated, [s]
-    protected lastUpdated: number = Date.now() / 1000,
+    protected lastUpdated: number = Date.now() / 1000.,
     // Type of this entity
     public readonly type = 'Entity',
   ) {

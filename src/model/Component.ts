@@ -8,7 +8,7 @@ export default class Component extends Entity {
 
   public shape = new Shape();
 
-  // center of mass
+  // TODO: center of mass
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
     super(id, lastUpdated, type || 'Component');

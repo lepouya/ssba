@@ -11,25 +11,22 @@ export default class Ship extends Entity {
 
   public readonly components = new Set<Component>();
 
-  // center of mass
+  // TODO: center of mass
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
     super(id, lastUpdated, type || 'Ship');
   }
 
-  get mass() {
+  // Get the total mass of ship + components
+  getTotalMass(): number {
     return Array.from(this.components)
       .reduce((mass, component) => mass + component.mass, this.baseMass);
-  }
-
-  set mass(m: number) {
-    this.baseMass = m;
   }
 
   save(): any {
     let res = super.save();
 
-    res.mass = this.baseMass;
+    res.baseMass = this.baseMass;
 
     res.x = this.x;
     res.y = this.y;
@@ -45,7 +42,7 @@ export default class Ship extends Entity {
   }
 
   load(data: any): Entity {
-    this.baseMass = data.mass || this.baseMass;
+    this.baseMass = data.baseMass || this.baseMass;
 
     this.x = data.x || this.x;
     this.y = data.y || this.y;

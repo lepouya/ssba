@@ -14,13 +14,52 @@ export default class Shape extends Entity {
   public readonly allowedCells = new Set<[number, number]>();
   public readonly blockedCells = new Set<[number, number]>();
 
-  // bg sprite, scaling, animation
+  // TODO: bg sprite, scaling, animation
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
     super(id, lastUpdated, type || 'Shape');
   }
 
-  // Calculations: area, hasCell, collision
+  // Calculate the total area covered by this shape
+  getArea(): number {
+    let baseArea = this.w * this.h,
+      whitelist = this.allowedCells.size,
+      blacklist = this.blockedCells.size;
+    return (whitelist > 0 ? whitelist : baseArea) - blacklist;
+  }
+
+  // Check if this shape has a cell at x,y
+  hasCell(x: number, y: number): boolean {
+    if ((x >= this.w) || (y >= this.h) || (x < 0) || (y < 0)) {
+      return false;
+    } else if (this.blockedCells.has([x, y])) {
+      return false;
+    } else if (this.allowedCells.has([x, y])) {
+      return true;
+    } else if (this.allowedCells.size == 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // Check how much of this shape is covered by another shape
+  collisionArea(other: Shape, dx = 0, dy = 0): number {
+    let area = 0;
+
+    // My box is ((0, 0), (w, h)), other box is ((dx, dy), (other.w + dx, other.h + dy))
+    for (let x = Math.max(0, dx); x < Math.min(this.w, other.w + dx); x++) {
+      for (let y = Math.max(0, dy); y < Math.min(this.h, other.h + dy); x++) {
+        if (this.hasCell(x, y)) {
+          if (other.hasCell(x - dx, y - dy)) {
+            area++;
+          }
+        }
+      }
+    }
+
+    return area;
+  }
 
   save(): any {
     let res = super.save();
