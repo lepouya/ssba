@@ -72,11 +72,7 @@ export default class Entity {
 
   static loadNew(data: any): Entity {
     let entityType = Entity.entityTypes.get(data.type || 'Entity') || Entity;
-    let entity = new entityType(
-          data.id || undefined,
-          data.updated || undefined,
-          data.type || undefined,
-        );
+    let entity = new entityType(data.id, data.updated, data.type);
 
     return entity.load(data);
   }
