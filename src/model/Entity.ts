@@ -1,7 +1,3 @@
-import Component from "./Component";
-import Shape from "./Shape";
-import Ship from "./Ship";
-
 export default class Entity {
   public name: string;
 
@@ -12,7 +8,7 @@ export default class Entity {
     // Unique identifier for this entity
     public readonly id = Math.random().toString(36).substr(2, 9),
     // Last time vectors were calculated, [s]
-    protected lastUpdated: number = Date.now() / 1000.,
+    public lastUpdated: number = Date.now() / 1000.,
     // Type of this entity
     public readonly type = 'Entity',
   ) {
@@ -42,6 +38,7 @@ export default class Entity {
   save(): any {
     let res: any = {};
 
+    res.type = this.type;
     res.id = this.id;
     res.updated = this.lastUpdated;
 
@@ -64,49 +61,22 @@ export default class Entity {
 
     this.children.clear();
     for (let child of data.children || []) {
-      this.children.add(Entity.loadNew(child));
+      Entity.loadNew(child).parent = this;
     }
 
     return this;
   }
 
+  static entityTypes = new Map<string, typeof Entity>()
+    .set('Entity', Entity);
+
   static loadNew(data: any): Entity {
-    let entity: Entity;
-
-    switch (data.type || 'Entity') {
-      case 'Shape':
-        entity = new Shape(
+    let entityType = Entity.entityTypes.get(data.type || 'Entity') || Entity;
+    let entity = new entityType(
           data.id || undefined,
           data.updated || undefined,
           data.type || undefined,
         );
-        break;
-
-      case 'Component':
-        entity = new Component(
-          data.id || undefined,
-          data.updated || undefined,
-          data.type || undefined,
-        );
-        break;
-
-      case 'Ship':
-        entity = new Ship(
-          data.id || undefined,
-          data.updated || undefined,
-          data.type || undefined,
-        );
-        break;
-
-      case 'Entity':
-      default:
-        entity = new Entity(
-          data.id || undefined,
-          data.updated || undefined,
-          data.type || undefined,
-        );
-        break;
-    }
 
     return entity.load(data);
   }

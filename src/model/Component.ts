@@ -2,6 +2,8 @@ import Entity from "./Entity";
 import Shape from "./Shape";
 
 export default class Component extends Entity {
+  static entityTypes = Entity.entityTypes.set('Component', Component);
+
   public mass = 0.;
   public x = 0;
   public y = 0;

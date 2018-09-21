@@ -3,6 +3,8 @@ import Component from "./Component";
 import Shape from "./Shape";
 
 export default class Ship extends Entity {
+  static entityTypes = Entity.entityTypes.set('Ship', Ship);
+
   public baseMass = 0.;
   public x = 0.;
   public y = 0.;

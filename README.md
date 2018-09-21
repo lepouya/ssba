@@ -6,7 +6,8 @@ pew pew
 * ~~Set up project and repository~~
 * ~~Import web skeleton from galactic-sim~~
 * ~~Experiment with Phaser~~
-* Model for entities, ships and components
+* ~~Model for entities, ships and components~~
+* Verify the data model
 * Editing of ship contents
 * Calculation of mass, velocity, CoM, force, etc.
 

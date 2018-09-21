@@ -1,6 +1,7 @@
 import Entity from "./Entity";
 
 export default class Shape extends Entity {
+  static entityTypes = Entity.entityTypes.set('Shape', Shape);
 
   // Size of each cell
   public cellW = 16;
