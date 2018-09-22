@@ -2,7 +2,7 @@
 pew pew
 
 ## TODO
-### M0: Get ships to wwork on screen
+### M0: Get ships to work on screen
 * ~~Set up project and repository~~
 * ~~Import web skeleton from galactic-sim~~
 * ~~Experiment with Phaser~~

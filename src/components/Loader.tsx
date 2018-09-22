@@ -4,6 +4,7 @@ import Spinner from './Spinner';
 import Game from './Game';
 
 import bind from '../utils/bind';
+import Scene from '../graphics/Scene';
 
 interface LoaderState {
   loaded: boolean;
@@ -16,12 +17,22 @@ export default class Loader extends React.Component<{}, LoaderState> {
   }
 
   componentWillMount() {
-    setTimeout(this.load, 1);
+    if (!this.state.loaded) {
+      setTimeout(this.load, 1);
+    }
   }
 
   @bind
   async load() {
-    this.setState({ loaded: true });
+    if (!Scene.game) {
+      Scene.initialize();
+    }
+
+    if (Scene.isInitialized()) {
+      this.setState({ loaded: true });
+    } else {
+      setTimeout(this.load, 100);
+    }
   }
 
   render() {
