@@ -25,6 +25,39 @@ export default class Ship extends Entity {
       .reduce((mass, component) => mass + component.mass, this.baseMass);
   }
 
+  // Add a component to the ship, placing it at given location.
+  // Uses x,y in component if none supplied.
+  // Returns true if placement was successful
+  placeComponent(component: Component, x?: number, y?: number): boolean {
+    let cx = x || component.x;
+    let cy = y || component.y;
+
+    // 1) Check if it it's already in components, remove it
+    if (this.components.has(component)) {
+      this.components.delete(component);
+    }
+
+    // 2) Check to see it fits in the ship
+    let containedArea = this.shape.collisionArea(component.shape, cx, cy);
+    if (containedArea != component.shape.getArea()) {
+      return false;
+    }
+
+    // 3) Check collision with other components
+    let collisionAreas = Array.from(this.components).map(other =>
+      other.shape.collisionArea(component.shape, cx - other.x, cy - other.y));
+    if (collisionAreas.some(a => a != 0)) {
+      return false;
+    }
+
+    // 4) Place
+    component.x = cx;
+    component.y = cy;
+    this.components.add(component);
+
+    return true;
+  }
+
   save(): any {
     let res = super.save();
 
