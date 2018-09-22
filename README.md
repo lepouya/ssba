@@ -7,8 +7,8 @@ pew pew
 * ~~Import web skeleton from galactic-sim~~
 * ~~Experiment with Phaser~~
 * ~~Model for entities, ships and components~~
-* Verify the data model
-* Editing of ship contents
+* ~~Verify the data model~~
+* ~~Editing of ship contents~~
 * Calculation of mass, velocity, CoM, force, etc.
 
 ### M1
