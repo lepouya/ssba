@@ -6,7 +6,7 @@ import Scene from '../graphics/Scene';
 export default class Main extends React.Component<RouteComponentProps<any>> {
   componentDidMount() {
     let domNode = ReactDOM.findDOMNode(this);
-    if (domNode && Scene.game) {
+    if (Scene.game && domNode && domNode instanceof Element) {
       domNode.appendChild(Scene.game.canvas);
     }
   }

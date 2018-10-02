@@ -59,7 +59,7 @@ export default class Game extends React.Component<GameProps, GameState> {
             </div>
             <div className="uk-navbar-right">
               <ul className="uk-navbar-nav">
-                <li>fps</li>
+                <li>-</li>
               </ul>
             </div>
           </nav>
