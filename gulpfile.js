@@ -16,6 +16,7 @@ var buffer = require('vinyl-buffer');
 const package = 'ssba';
 const outDir = 'dist';
 const vendor = 'vendor';
+const assetEntries = ['assets/**/*'];
 const htmlEntries = ['src/index.pug'];
 const cssEntries = ['src/index.scss'];
 const jsEntries = ['src/index.tsx'];
@@ -38,8 +39,17 @@ gulp.task('watching', function (done) {
   done();
 });
 
+gulp.task('assets', function () {
+  return gulp
+    .src(assetEntries, {
+      base: '.',
+    })
+    .pipe(gulp.dest(outDir));
+});
+
 gulp.task('html', function () {
   const debug = (process.env.NODE_ENV !== 'production');
+  const htmlName = 'index' + (debug ? '.html' : '.min.html');
   const jsName = package + (debug ? '.js' : '.min.js');
   const cssName = package + (debug ? '.css' : '.min.css');
   const vendorName = vendor + (debug ? '.js' : '.min.js');
@@ -54,6 +64,7 @@ gulp.task('html', function () {
         vendorSource: vendorName,
       }
     }))
+    .pipe(rename(htmlName))
     .pipe(gulp.dest(outDir));
 });
 
@@ -116,7 +127,7 @@ gulp.task('server', function () {
   });
 });
 
-gulp.task('compile', gulp.parallel('html', 'sass', 'vendor', 'ts'));
+gulp.task('compile', gulp.parallel('assets', 'html', 'sass', 'vendor', 'ts'));
 gulp.task('release', gulp.series('prod', 'compile'));
 gulp.task('debug', gulp.series('dev', 'compile'));
 gulp.task('watch', gulp.series('watching', 'compile'));
