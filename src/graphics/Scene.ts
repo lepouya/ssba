@@ -34,12 +34,11 @@ export default class Scene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('clown', 'clown.png');
+    this.load.atlas('test-ships');
   }
 
   create() {
-    this.add.image(400, 300, 'clown');
-    this.add.text(380, 320, 'What');
+    this.physics.add.image(400, 300, 'test-ships', 'Ship L');
     this.initialized = true;
   }
 }
