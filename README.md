@@ -11,6 +11,7 @@ pew pew
 * ~~Editing of ship contents~~
 * Make proper Game and Scene classes
 * Render ships and collection of components
+* Separate out component properties and location
 * Hook up user inputs for movement and rotation
 
 ### M1: Engines

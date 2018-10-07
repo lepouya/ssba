@@ -67,13 +67,47 @@ export default class Entity {
     return this;
   }
 
+  cache(): Map<string, Entity> {
+    Entity.allEntities.set(this.id, this);
+
+    return Entity.allEntities;
+  }
+
+  static allEntities = new Map<string, Entity>();
   static entityTypes = new Map<string, typeof Entity>()
     .set('Entity', Entity);
 
   static loadNew(data: any): Entity {
+    // Copy the entity if it's already present in the cache
+    if (Entity.allEntities.has(data.toString())) {
+      let entity = Entity.allEntities.get(data.toString());
+      if (entity) {
+        data = entity.save();
+      }
+    }
+
     let entityType = Entity.entityTypes.get(data.type || 'Entity') || Entity;
     let entity = new entityType(data.id, data.updated, data.type);
 
     return entity.load(data);
+  }
+
+  static loadAll(data: any): Map<string, Entity> {
+    for (let item in data) {
+      Entity.allEntities.set(item, Entity.loadNew(data[item]));
+    }
+
+    return Entity.allEntities;
+  }
+
+  static saveAll(): any {
+    let data: {[k: string]: any} = {};
+    Entity.allEntities.forEach((value, key) => data[key] = value.save());
+
+    return data;
+  }
+
+  static resetAll() {
+    Entity.allEntities.clear();
   }
 }
