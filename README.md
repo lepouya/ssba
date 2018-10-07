@@ -9,8 +9,8 @@ pew pew
 * ~~Model for entities, ships and components~~
 * ~~Verify the data model~~
 * ~~Editing of ship contents~~
-* Make proper Game and Scene classes
-* Render ships and collection of components
+* ~~Make proper Game and Scene classes~~
+* ~~Render ships and collection of components~~
 * Separate out component properties and location
 * Hook up user inputs for movement and rotation
 

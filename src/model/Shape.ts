@@ -15,7 +15,11 @@ export default class Shape extends Entity {
   protected readonly allowedCells = new Set<string>();
   protected readonly blockedCells = new Set<string>();
 
-  // TODO: bg sprite, scaling, animation
+  // Sprite information
+  public bgKey?: string;
+  public bgFrame?: string;
+
+  // TODO: animation
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
     super(id, lastUpdated, type || 'Shape');
@@ -94,6 +98,9 @@ export default class Shape extends Entity {
     res.w = this.w;
     res.h = this.h;
 
+    res.bgKey = this.bgKey;
+    res.bgFrame = this.bgFrame;
+
     if (this.allowedCells.size > 0) {
       res.allowedCells = Array.from(this.allowedCells);
     }
@@ -111,6 +118,9 @@ export default class Shape extends Entity {
 
     this.w = data.w || this.w;
     this.h = data.h || this.h;
+
+    this.bgKey = data.bgKey || this.bgKey;
+    this.bgFrame = data.bgFrame || this.bgFrame;
 
     this.allowedCells.clear();
     for (let cell of data.allowedCells || []) {
