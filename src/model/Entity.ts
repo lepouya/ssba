@@ -79,10 +79,13 @@ export default class Entity {
 
   static loadNew(data: any): Entity {
     // Copy the entity if it's already present in the cache
-    if (Entity.allEntities.has(data.toString())) {
-      let entity = Entity.allEntities.get(data.toString());
+    let name = data.toString();
+    if (Entity.allEntities.has(name)) {
+      let entity = Entity.allEntities.get(name);
       if (entity) {
         data = entity.save();
+        data.id = undefined;
+        data.name = name;
       }
     }
 
@@ -94,7 +97,9 @@ export default class Entity {
 
   static loadAll(data: any): Map<string, Entity> {
     for (let item in data) {
-      Entity.allEntities.set(item, Entity.loadNew(data[item]));
+      let entity = Entity.loadNew(data[item]);
+      entity.name = item;
+      Entity.allEntities.set(item, entity);
     }
 
     return Entity.allEntities;

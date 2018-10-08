@@ -5,9 +5,6 @@ export default class Component extends Entity {
   static entityTypes = Entity.entityTypes.set('Component', Component);
 
   public mass = 0.;
-  public x = 0;
-  public y = 0;
-
   public shape = new Shape();
 
   // TODO: center of mass
@@ -20,10 +17,6 @@ export default class Component extends Entity {
     let res = super.save();
 
     res.mass = this.mass;
-
-    res.x = this.x;
-    res.y = this.y;
-
     res.shape = this.shape.save();
 
     return res;
@@ -31,9 +24,6 @@ export default class Component extends Entity {
 
   load(data: any): Entity {
     this.mass = data.mass || this.mass;
-
-    this.x = data.x || this.x;
-    this.y = data.y || this.y;
 
     if (data.shape) {
       this.shape = Entity.loadNew(data.shape) as Shape;

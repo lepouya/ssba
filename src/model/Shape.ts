@@ -119,8 +119,12 @@ export default class Shape extends Entity {
     this.w = data.w || this.w;
     this.h = data.h || this.h;
 
-    this.bgKey = data.bgKey || this.bgKey;
-    this.bgFrame = data.bgFrame || this.bgFrame;
+    if (data.bgKey) {
+      this.bgKey = data.bgKey;
+    }
+    if (data.bgFrame) {
+      this.bgFrame = data.bgFrame;
+    }
 
     this.allowedCells.clear();
     for (let cell of data.allowedCells || []) {

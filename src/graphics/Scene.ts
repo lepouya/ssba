@@ -70,12 +70,12 @@ export default class Scene extends Phaser.Scene {
       frame: ship.shape.bgFrame,
     }));
 
-    ship.components.forEach(component => container.add(
+    ship.components.forEach(sc => container.add(
       this.make.sprite({
-        x: (component.x + component.shape.w / 2) * component.shape.cellW - originX,
-        y: (component.y + component.shape.h / 2) * component.shape.cellH - originY,
-        key: component.shape.bgKey,
-        frame: component.shape.bgFrame,
+        x: (sc.x + sc.component.shape.w / 2) * sc.component.shape.cellW - originX,
+        y: (sc.y + sc.component.shape.h / 2) * sc.component.shape.cellH - originY,
+        key: sc.component.shape.bgKey,
+        frame: sc.component.shape.bgFrame,
       })
     ))
 

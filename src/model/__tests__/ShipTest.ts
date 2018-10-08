@@ -43,15 +43,16 @@ describe('Ship properties', () => {
     expect(c1.id).to.equal('c1');
     expect(c1.name).to.equal('c1');
     expect(c1.type).to.equal('Component');
-    expect(c1.x).to.equal(0);
-    expect(c1.y).to.equal(0);
     expect(c1.mass).to.equal(0);
   });
 
   it('getTotalMass works with components', () => {
     expect(ship.getTotalMass()).to.equal(0);
 
-    ship.components.add(c1).add(c2).add(c3);
+    ship.components
+      .set('c1', {x:0, y:0, component: c1})
+      .set('c2', {x:0, y:0, component: c2})
+      .set('c3', {x:0, y:0, component: c3});
     expect(ship.getTotalMass()).to.equal(0);
 
     ship.baseMass = 4;
@@ -74,11 +75,14 @@ describe('Ship properties', () => {
   });
 
   it('Load after save returns same composite ship', () => {
-    c1.mass = 1; c1.x = 1; c1.y = 3;
-    c2.mass = 2; c2.x = 4; c2.y = 5;
-    c3.mass = 3; c3.x = 9; c3.y = 4;
+    c1.mass = 1;
+    c2.mass = 2;
+    c3.mass = 3;
     ship.baseMass = 4; ship.x = 16; ship.y = 1;
-    ship.components.add(c1).add(c2).add(c3);
+    ship.components
+      .set('c1', {x:1, y:3, component: c1})
+      .set('c2', {x:4, y:5, component: c2})
+      .set('c3', {x:9, y:4, component: c3});
 
     expect(Entity.loadNew(ship.save())).to.deep.equal(ship);
   });
@@ -90,6 +94,10 @@ describe('Ship and component placement', () => {
   let c1: Component;
   let c2: Component;
   let c3: Component;
+
+  let getComponent = (c: Component) =>
+    ship.components.get(c.id) ||
+    {x: -5.123, y: -9.33, component: new Component()}
 
   beforeEach('Setup ship and components', () => {
     ship = new Ship('ship');
@@ -116,8 +124,8 @@ describe('Ship and component placement', () => {
   it('Simple component placement', () => {
     expect(ship.placeComponent(c1,2,7)).to.be.true;
     expect(ship.components.size).to.equal(1);
-    expect(c1.x).to.equal(2);
-    expect(c1.y).to.equal(7);
+    expect(getComponent(c1).x).to.equal(2);
+    expect(getComponent(c1).y).to.equal(7);
   });
 
   it('Placing multiple components', () => {
@@ -125,24 +133,24 @@ describe('Ship and component placement', () => {
     expect(ship.placeComponent(c2,2,4)).to.be.true;
     expect(ship.placeComponent(c3,1,0)).to.be.true;
     expect(ship.components.size).to.equal(3);
-    expect(c1.x).to.equal(2);
-    expect(c1.y).to.equal(7);
-    expect(c2.x).to.equal(2);
-    expect(c2.y).to.equal(4);
-    expect(c3.x).to.equal(1);
-    expect(c3.y).to.equal(0);
+    expect(getComponent(c1).x).to.equal(2);
+    expect(getComponent(c1).y).to.equal(7);
+    expect(getComponent(c2).x).to.equal(2);
+    expect(getComponent(c2).y).to.equal(4);
+    expect(getComponent(c3).x).to.equal(1);
+    expect(getComponent(c3).y).to.equal(0);
   });
 
   it('Moving a component', () => {
     expect(ship.placeComponent(c2,2,3)).to.be.true;
     expect(ship.components.size).to.equal(1);
-    expect(c2.x).to.equal(2);
-    expect(c2.y).to.equal(3);
+    expect(getComponent(c2).x).to.equal(2);
+    expect(getComponent(c2).y).to.equal(3);
 
     expect(ship.placeComponent(c2,1,2)).to.be.true;
     expect(ship.components.size).to.equal(1);
-    expect(c2.x).to.equal(1);
-    expect(c2.y).to.equal(2);
+    expect(getComponent(c2).x).to.equal(1);
+    expect(getComponent(c2).y).to.equal(2);
   });
 
   it('Component collisions', () => {
