@@ -8,6 +8,7 @@ export default class Ship extends Entity {
   public baseMass = 0.;
   public x = 0.;
   public y = 0.;
+  public angle = 0.;
 
   public shape = new Shape();
 
@@ -65,6 +66,7 @@ export default class Ship extends Entity {
 
     res.x = this.x;
     res.y = this.y;
+    res.angle = this.angle;
 
     res.shape = this.shape.save();
 
@@ -81,6 +83,7 @@ export default class Ship extends Entity {
 
     this.x = data.x || this.x;
     this.y = data.y || this.y;
+    this.angle = data.angle || this.angle;
 
     if (data.shape) {
       this.shape = Entity.loadNew(data.shape) as Shape;

@@ -51,26 +51,34 @@ export default class Scene extends Phaser.Scene {
 
   create() {
     Entity.loadAll(this.cache.json.get('test-data'));
-    Scene.getShipObject('Ship S');
-    Scene.getShipObject('Ship L');
+    this.getShipObject('Ship S');
+    this.getShipObject('Ship L');
 
     this.initialized = true;
   }
 
-  static getShipObject(shipName: string): Phaser.Physics.Arcade.Group {
+  getShipObject(shipName: string): Phaser.GameObjects.GameObject {
     let ship = Entity.loadNew(shipName) as Ship;
-    let originX = ship.x - ship.shape.w * ship.shape.cellW / 2;
-    let originY = ship.y - ship.shape.h * ship.shape.cellH / 2;
+    let originX = ship.shape.w * ship.shape.cellW / 2;
+    let originY = ship.shape.h * ship.shape.cellH / 2;
 
-    let group = Scene.scene.physics.add.group();
-    group.create(ship.x, ship.y, ship.shape.bgKey, ship.shape.bgFrame);
-    ship.components.forEach(component =>
-      group.create(
-        originX + (component.x + component.shape.w / 2) * component.shape.cellW,
-        originY + (component.y + component.shape.h / 2) * component.shape.cellH,
-        component.shape.bgKey, component.shape.bgFrame
-      ))
+    let container = this.add.container(ship.x, ship.y);
+    container.setRotation(ship.angle);
 
-    return group;
+    container.add(this.make.sprite({
+      key: ship.shape.bgKey,
+      frame: ship.shape.bgFrame,
+    }));
+
+    ship.components.forEach(component => container.add(
+      this.make.sprite({
+        x: (component.x + component.shape.w / 2) * component.shape.cellW - originX,
+        y: (component.y + component.shape.h / 2) * component.shape.cellH - originY,
+        key: component.shape.bgKey,
+        frame: component.shape.bgFrame,
+      })
+    ))
+
+    return container;
   }
 }

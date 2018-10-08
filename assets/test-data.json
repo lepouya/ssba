@@ -89,6 +89,7 @@
     "shape": "Small Arrow",
     "baseMass": 6,
     "x": 100, "y": 100,
+    "angle": 3.141592,
     "components": [
       {
         "type": "Component",
@@ -110,6 +111,7 @@
     "shape": "Large Arrow",
     "baseMass": 35,
     "x": 400, "y": 300,
+    "angle": 1,
     "components": [
       {
         "type": "Component",
