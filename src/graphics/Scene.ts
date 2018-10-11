@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import Ship from '../model/Ship';
+import ShipObject from './ShipObject';
 import EntityManager from '../model/EntityManager';
 
 export default class Scene extends Phaser.Scene {
@@ -29,6 +29,8 @@ export default class Scene extends Phaser.Scene {
     return (Scene.scene && (Scene.scene as Scene).initialized);
   }
 
+  public shipObjects = new Map<string, ShipObject>();
+
   constructor() {
     super({
       key: 'Game Scene',
@@ -43,34 +45,14 @@ export default class Scene extends Phaser.Scene {
 
   create() {
     EntityManager.loadAll(this.cache.json.get('test-data'));
-    this.getShipObject('Ship S');
-    this.getShipObject('Ship L');
+
+    this.shipObjects.set('Ship S', new ShipObject('Ship S'));
+    this.shipObjects.set('Ship L', new ShipObject('Ship L'));
 
     this.initialized = true;
   }
 
-  getShipObject(shipName: string): Phaser.GameObjects.GameObject {
-    let ship = EntityManager.load(shipName) as Ship;
-    let originX = ship.shape.w * ship.shape.cellW / 2;
-    let originY = ship.shape.h * ship.shape.cellH / 2;
-
-    let container = this.add.container(ship.x, ship.y);
-    container.setRotation(ship.angle);
-
-    container.add(this.make.sprite({
-      key: ship.shape.bgKey,
-      frame: ship.shape.bgFrame,
-    }));
-
-    ship.components.forEach(sc => container.add(
-      this.make.sprite({
-        x: (sc.x + sc.component.shape.w / 2) * sc.component.shape.cellW - originX,
-        y: (sc.y + sc.component.shape.h / 2) * sc.component.shape.cellH - originY,
-        key: sc.component.shape.bgKey,
-        frame: sc.component.shape.bgFrame,
-      })
-    ))
-
-    return container;
+  update() {
+    this.shipObjects.forEach(shipObject => shipObject.update());
   }
 }

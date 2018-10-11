@@ -100,7 +100,7 @@
     "shape": "Large Arrow",
     "baseMass": 35,
     "x": 400, "y": 300,
-    "dx": 1, "dy": 0.1,
+    "dx": 5, "dy": -2,
     "angle": 1,
     "components": [
       {

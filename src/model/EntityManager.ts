@@ -8,6 +8,10 @@ export default class EntityManager {
     return Entity.loadNew(data);
   }
 
+  static fetch(name: string): Entity | undefined {
+    return Entity.allEntities.get(name);
+  }
+
   static loadAll(data: any): Map<string, Entity> {
     // Make sure all entity types are initialized
     Entity.entityTypes;
