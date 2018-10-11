@@ -13,7 +13,7 @@ pew pew
 * ~~Render ships and collection of components~~
 * ~~Separate out component properties and location~~
 * ~~Updating items: Movement and rotation~~
-* Hook up user inputs
+* ~~Hook up user inputs~~
 * Background and camera control
 
 ### M1: Engines

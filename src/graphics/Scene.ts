@@ -46,8 +46,12 @@ export default class Scene extends Phaser.Scene {
   create() {
     EntityManager.loadAll(this.cache.json.get('test-data'));
 
-    this.shipObjects.set('Ship S', new ShipObject('Ship S'));
-    this.shipObjects.set('Ship L', new ShipObject('Ship L'));
+    let shipS = new ShipObject('Ship S');
+    let shipL = new ShipObject('Ship L');
+    this.shipObjects.set('Ship S', shipS);
+    this.shipObjects.set('Ship L', shipL);
+    shipS.setKeys('W', 'S', 'A', 'D');
+    shipL.setKeys('UP', 'DOWN', 'LEFT', 'RIGHT');
 
     this.initialized = true;
   }

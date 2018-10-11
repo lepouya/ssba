@@ -83,7 +83,6 @@
     "baseMass": 6,
     "x": 100, "y": 100,
     "angle": 3.141592,
-    "da": 1,
     "components": [
       {
         "x": 1, "y": 1,
@@ -100,7 +99,6 @@
     "shape": "Large Arrow",
     "baseMass": 35,
     "x": 400, "y": 300,
-    "dx": 5, "dy": -2,
     "angle": 1,
     "components": [
       {

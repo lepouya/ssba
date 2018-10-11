@@ -28,10 +28,52 @@ export default class ShipObject {
         key: sc.component.shape.bgKey,
         frame: sc.component.shape.bgFrame,
       })
-    ))
+    ));
+  }
+
+  private kAccelerate?: Phaser.Input.Keyboard.Key;
+  private kBrake?: Phaser.Input.Keyboard.Key;
+  private kLeft?: Phaser.Input.Keyboard.Key;
+  private kRight?: Phaser.Input.Keyboard.Key;
+  public setKeys(accelerate: string, brake: string, left: string, right: string) {
+    this.kAccelerate = Scene.scene.input.keyboard.addKey(accelerate);
+    this.kBrake = Scene.scene.input.keyboard.addKey(brake);
+    this.kLeft = Scene.scene.input.keyboard.addKey(left);
+    this.kRight = Scene.scene.input.keyboard.addKey(right);
   }
 
   update() {
+    if (this.kAccelerate && this.kAccelerate.isDown) {
+      this.ship.dx += Math.sin(this.ship.angle);
+      this.ship.dy -= Math.cos(this.ship.angle);
+    }
+
+    if (this.kBrake && this.kBrake.isDown) {
+      this.ship.dx *= 0.95;
+      this.ship.dy *= 0.95;
+      this.ship.da *= 0.95;
+
+      if (Math.abs(this.ship.dx) <= 0.05) {
+        this.ship.dx = 0;
+      }
+
+      if (Math.abs(this.ship.dy) <= 0.05) {
+        this.ship.dy = 0;
+      }
+
+      if (Math.abs(this.ship.da) <= 0.05) {
+        this.ship.da = 0;
+      }
+    }
+
+    if (this.kLeft && this.kLeft.isDown) {
+      this.ship.da -= 0.01;
+    }
+
+    if (this.kRight && this.kRight.isDown) {
+      this.ship.da += 0.01;
+    }
+
     this.container.setX(this.ship.x);
     this.container.setY(this.ship.y);
     this.container.setRotation(this.ship.angle);
