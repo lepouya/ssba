@@ -1,8 +1,6 @@
 import * as Phaser from 'phaser';
-import Entity from '../model/Entity';
 import Ship from '../model/Ship';
-import Component from '../model/Component';
-import Shape from '../model/Shape';
+import EntityManager from '../model/EntityManager';
 
 export default class Scene extends Phaser.Scene {
   public static scene: Phaser.Scene;
@@ -41,16 +39,10 @@ export default class Scene extends Phaser.Scene {
     // Load json files
     this.load.atlas('test-ships');
     this.load.json('test-data');
-
-    // Make sure all entity types are initialized
-    Entity.entityTypes;
-    Ship.entityTypes;
-    Component.entityTypes;
-    Shape.entityTypes;
   }
 
   create() {
-    Entity.loadAll(this.cache.json.get('test-data'));
+    EntityManager.loadAll(this.cache.json.get('test-data'));
     this.getShipObject('Ship S');
     this.getShipObject('Ship L');
 
@@ -58,7 +50,7 @@ export default class Scene extends Phaser.Scene {
   }
 
   getShipObject(shipName: string): Phaser.GameObjects.GameObject {
-    let ship = Entity.loadNew(shipName) as Ship;
+    let ship = EntityManager.load(shipName) as Ship;
     let originX = ship.shape.w * ship.shape.cellW / 2;
     let originY = ship.shape.h * ship.shape.cellH / 2;
 

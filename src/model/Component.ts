@@ -13,6 +13,18 @@ export default class Component extends Entity {
     super(id, lastUpdated, type || 'Component');
   }
 
+  update(now?: number): number {
+    let dt = super.update(now);
+    this.shape.update(now);
+    if (dt <= 0.) {
+      return 0.;
+    }
+
+    // Nothing to update at the moment
+
+    return dt;
+  }
+
   save(): any {
     let res = super.save();
 

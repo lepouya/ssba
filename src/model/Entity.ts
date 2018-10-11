@@ -35,6 +35,17 @@ export default class Entity {
     }
   }
 
+  update(now = Date.now() / 1000.): number {
+    let dt = now - this.lastUpdated;
+    if (dt < 1. / 60.) {
+      return 0.;
+    }
+
+    this.children.forEach(entity => entity.update(now));
+    this.lastUpdated = now;
+    return dt;
+  }
+
   save(): any {
     let res: any = {};
 
@@ -93,26 +104,5 @@ export default class Entity {
     let entity = new entityType(data.id, data.updated, data.type);
 
     return entity.load(data);
-  }
-
-  static loadAll(data: any): Map<string, Entity> {
-    for (let item in data) {
-      let entity = Entity.loadNew(data[item]);
-      entity.name = item;
-      Entity.allEntities.set(item, entity);
-    }
-
-    return Entity.allEntities;
-  }
-
-  static saveAll(): any {
-    let data: {[k: string]: any} = {};
-    Entity.allEntities.forEach((value, key) => data[key] = value.save());
-
-    return data;
-  }
-
-  static resetAll() {
-    Entity.allEntities.clear();
   }
 }

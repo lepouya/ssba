@@ -12,9 +12,14 @@ export default class Ship extends Entity {
   static entityTypes = Entity.entityTypes.set('Ship', Ship);
 
   public baseMass = 0.;
+
   public x = 0.;
   public y = 0.;
   public angle = 0.;
+
+  public dx = 0.;
+  public dy = 0.;
+  public da = 0.;
 
   public shape = new Shape();
 
@@ -60,6 +65,20 @@ export default class Ship extends Entity {
     return true;
   }
 
+  update(now?: number): number {
+    let dt = super.update(now);
+    this.shape.update(now);
+    if (dt <= 0.) {
+      return 0.;
+    }
+
+    this.x += this.dx * dt;
+    this.y += this.dy * dt;
+    this.angle += this.da * dt;
+
+    return dt;
+  }
+
   save(): any {
     let res = super.save();
 
@@ -68,6 +87,10 @@ export default class Ship extends Entity {
     res.x = this.x;
     res.y = this.y;
     res.angle = this.angle;
+
+    res.dx = this.dx;
+    res.dy = this.dy;
+    res.da = this.da;
 
     res.shape = this.shape.save();
 
@@ -91,6 +114,10 @@ export default class Ship extends Entity {
     this.x = data.x || this.x;
     this.y = data.y || this.y;
     this.angle = data.angle || this.angle;
+
+    this.dx = data.dx || this.dx;
+    this.dy = data.dy || this.dy;
+    this.da = data.da || this.da;
 
     if (data.shape) {
       this.shape = Entity.loadNew(data.shape) as Shape;

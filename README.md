@@ -12,7 +12,9 @@ pew pew
 * ~~Make proper Game and Scene classes~~
 * ~~Render ships and collection of components~~
 * ~~Separate out component properties and location~~
-* Hook up user inputs for movement and rotation
+* ~~Updating items: Movement and rotation~~
+* Hook up user inputs
+* Background and camera control
 
 ### M1: Engines
 * Calculation of mass, velocity, CoM, force, etc.

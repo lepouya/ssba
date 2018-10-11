@@ -4,6 +4,7 @@ import { HashRouter, NavLink, Route, Switch } from 'react-router-dom';
 import Main from '../pages/Main';
 import Help from '../pages/Help';
 import bind from '../utils/bind';
+import EntityManager from '../model/EntityManager';
 
 interface GameProps {
 }
@@ -42,6 +43,8 @@ export default class Game extends React.Component<GameProps, GameState> {
 
   @bind
   tick() {
+    EntityManager.updateAll();
+
     const now = Date.now();
     this.setState({ lastUpdate: now });
   }
