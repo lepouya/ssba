@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import ShipObject from './ShipObject';
 import EntityManager from '../model/EntityManager';
 import CameraObject from './CameraObject';
+import Background from './Background';
 
 export default class Scene extends Phaser.Scene {
   public static scene: Phaser.Scene;
@@ -32,6 +33,7 @@ export default class Scene extends Phaser.Scene {
 
   public shipObjects = new Map<string, ShipObject>();
   public cameraObject?: CameraObject;
+  public background?: Background;
 
   constructor() {
     super({
@@ -61,11 +63,13 @@ export default class Scene extends Phaser.Scene {
     this.cameraObject!.followObjects.add(shipS.container);
     this.cameraObject!.followObjects.add(shipL.container);
 
+    this.background = new Background(this, 'stars', 10000, 10000);
     this.initialized = true;
   }
 
   update() {
     this.shipObjects.forEach(shipObject => shipObject.update());
     this.cameraObject!.update();
+    this.background!.update();
   }
 }

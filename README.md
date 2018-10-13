@@ -14,7 +14,7 @@ pew pew
 * ~~Separate out component properties and location~~
 * ~~Updating items: Movement and rotation~~
 * ~~Hook up user inputs~~
-* Background and camera control
+* ~~Background and camera control~~
 
 ### M1: Engines
 * Calculation of mass, velocity, CoM, force, etc.

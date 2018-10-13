@@ -10,6 +10,7 @@ export default class ShipObject {
     this.ship = EntityManager.fetch(shipName) as Ship;
     this.container = scene.add.container(this.ship.x, this.ship.y);
 
+    this.container.setDepth(1000);
     this.container.setRotation(this.ship.angle);
 
     this.container.add(scene.make.sprite({
