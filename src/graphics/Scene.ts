@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import ShipObject from './ShipObject';
 import EntityManager from '../model/EntityManager';
+import CameraObject from './CameraObject';
 
 export default class Scene extends Phaser.Scene {
   public static scene: Phaser.Scene;
@@ -30,6 +31,7 @@ export default class Scene extends Phaser.Scene {
   }
 
   public shipObjects = new Map<string, ShipObject>();
+  public cameraObject?: CameraObject;
 
   constructor() {
     super({
@@ -41,22 +43,29 @@ export default class Scene extends Phaser.Scene {
     // Load json files
     this.load.atlas('test-ships');
     this.load.json('test-data');
+    this.load.image('stars');
   }
 
   create() {
     EntityManager.loadAll(this.cache.json.get('test-data'));
 
-    let shipS = new ShipObject('Ship S');
-    let shipL = new ShipObject('Ship L');
+    let shipS = new ShipObject(this, 'Ship S');
+    let shipL = new ShipObject(this, 'Ship L');
     this.shipObjects.set('Ship S', shipS);
     this.shipObjects.set('Ship L', shipL);
     shipS.setKeys('W', 'S', 'A', 'D');
     shipL.setKeys('UP', 'DOWN', 'LEFT', 'RIGHT');
+
+    this.cameras.main.setBounds(-5000, -5000, 10000, 10000);
+    this.cameraObject = new CameraObject(this);
+    this.cameraObject!.followObjects.add(shipS.container);
+    this.cameraObject!.followObjects.add(shipL.container);
 
     this.initialized = true;
   }
 
   update() {
     this.shipObjects.forEach(shipObject => shipObject.update());
+    this.cameraObject!.update();
   }
 }

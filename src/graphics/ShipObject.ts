@@ -1,19 +1,18 @@
 import * as Phaser from 'phaser';
 import Ship from '../model/Ship';
 import EntityManager from '../model/EntityManager';
-import Scene from './Scene';
 
 export default class ShipObject {
   public container: Phaser.GameObjects.Container;
   public ship: Ship;
 
-  constructor(shipObj: string) {
-    this.ship = EntityManager.fetch(shipObj) as Ship;
-    this.container = Scene.scene.add.container(this.ship.x, this.ship.y);
+  constructor(public scene: Phaser.Scene, shipName: string) {
+    this.ship = EntityManager.fetch(shipName) as Ship;
+    this.container = scene.add.container(this.ship.x, this.ship.y);
 
     this.container.setRotation(this.ship.angle);
 
-    this.container.add(Scene.scene.make.sprite({
+    this.container.add(scene.make.sprite({
       key: this.ship.shape.bgKey,
       frame: this.ship.shape.bgFrame,
     }));
@@ -22,7 +21,7 @@ export default class ShipObject {
     let originY = this.ship.shape.h * this.ship.shape.cellH / 2;
 
     this.ship.components.forEach(sc => this.container.add(
-      Scene.scene.make.sprite({
+      scene.make.sprite({
         x: (sc.x + sc.component.shape.w / 2) * sc.component.shape.cellW - originX,
         y: (sc.y + sc.component.shape.h / 2) * sc.component.shape.cellH - originY,
         key: sc.component.shape.bgKey,
@@ -36,10 +35,10 @@ export default class ShipObject {
   private kLeft?: Phaser.Input.Keyboard.Key;
   private kRight?: Phaser.Input.Keyboard.Key;
   public setKeys(accelerate: string, brake: string, left: string, right: string) {
-    this.kAccelerate = Scene.scene.input.keyboard.addKey(accelerate);
-    this.kBrake = Scene.scene.input.keyboard.addKey(brake);
-    this.kLeft = Scene.scene.input.keyboard.addKey(left);
-    this.kRight = Scene.scene.input.keyboard.addKey(right);
+    this.kAccelerate = this.scene.input.keyboard.addKey(accelerate);
+    this.kBrake = this.scene.input.keyboard.addKey(brake);
+    this.kLeft = this.scene.input.keyboard.addKey(left);
+    this.kRight = this.scene.input.keyboard.addKey(right);
   }
 
   update() {

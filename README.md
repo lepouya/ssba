@@ -18,6 +18,7 @@ pew pew
 
 ### M1: Engines
 * Calculation of mass, velocity, CoM, force, etc.
+* Allow components to have specialized actions
 * Ship movement and maneuvering under acceleration
 * Engines
 * Power management
