@@ -4,7 +4,7 @@ import 'uikit';
 
 import Loader from './components/Loader';
 
-window.onload = _ => {
+window.onload = () => {
   ReactDOM.render(
     <Loader />,
     document.getElementById('main'));

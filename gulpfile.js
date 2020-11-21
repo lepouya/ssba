@@ -1,5 +1,4 @@
 var gulp = require('gulp');
-var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 var sourcemaps = require('gulp-sourcemaps');
 var tsify = require('tsify');
@@ -12,6 +11,7 @@ var pug = require('gulp-pug');
 var connect = require('gulp-connect');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
+var log = require('fancy-log');
 
 const package = 'ssba';
 const outDir = 'dist';
@@ -34,7 +34,6 @@ gulp.task('dev', function (done) {
 });
 
 gulp.task('watching', function (done) {
-  process.env.NODE_ENV = 'development';
   process.env.watching = true;
   done();
 });
@@ -130,7 +129,7 @@ gulp.task('server', function () {
 gulp.task('compile', gulp.parallel('assets', 'html', 'sass', 'vendor', 'ts'));
 gulp.task('release', gulp.series('prod', 'compile'));
 gulp.task('debug', gulp.series('dev', 'compile'));
-gulp.task('watch', gulp.series('watching', 'compile'));
+gulp.task('watch', gulp.series('dev', 'watching', 'compile'));
 gulp.task('start', gulp.series('watch', 'server'));
 
 var bundler = null;
@@ -141,27 +140,27 @@ function bundle() {
 
   if (!bundler) {
     bundler = browserify({
-        basedir: '.',
-        debug: debug,
-        entries: jsEntries,
-        extensions: extensions,
-      })
+      basedir: '.',
+      debug: debug,
+      entries: jsEntries,
+      extensions: extensions,
+    })
       .external(externalLibs)
       .plugin(tsify, {
         target: 'ES5',
         module: 'ESNext',
-        lib: ['DOM', 'ESNext'],
+        lib: ['DOM', 'ESNext', 'ScriptHost'],
         allowSyntheticDefaultImports: true,
       })
       .transform(babelify.configure({
-        presets: ['env', 'react'],
+        presets: ['@babel/preset-env', '@babel/preset-react'],
         extensions: extensions,
       }));
 
     if (process.env.watching) {
       bundler = watchify(bundler);
       bundler.on("update", bundle);
-      bundler.on("log", gutil.log);
+      bundler.on("log", log);
     }
   }
 

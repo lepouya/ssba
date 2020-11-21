@@ -12,6 +12,7 @@
 			"ssba",
 			"tsify",
 			"uikit"
-		]
+		],
+		"editor.tabSize": 2
 	}
 }

@@ -11,7 +11,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "lib": ["dom", "esnext"],
+    "lib": ["DOM", "ESNext", "ScriptHost"],
     "allowJs": true,
     "jsx": "react",
     "sourceMap": true,
