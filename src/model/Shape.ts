@@ -1,7 +1,7 @@
 import Entity from "./Entity";
 
 export default class Shape extends Entity {
-  static entityTypes = Entity.entityTypes.set('Shape', Shape);
+  static entityTypes = Entity.entityTypes.set("Shape", Shape);
 
   // Size of each cell
   public cellW = 16;
@@ -22,7 +22,7 @@ export default class Shape extends Entity {
   // TODO: animation
 
   constructor(id?: string, lastUpdated?: number, type?: string) {
-    super(id, lastUpdated, type || 'Shape');
+    super(id, lastUpdated, type || "Shape");
   }
 
   setSize(width: number, height: number): Shape {
@@ -58,7 +58,7 @@ export default class Shape extends Entity {
   // Check if this shape has a cell at x,y
   hasCell(x: number, y: number): boolean {
     let s = `(${x},${y})`;
-    if ((x >= this.w) || (y >= this.h) || (x < 0) || (y < 0)) {
+    if (x >= this.w || y >= this.h || x < 0 || y < 0) {
       return false;
     } else if (this.blockedCells.has(s)) {
       return false;
@@ -87,6 +87,58 @@ export default class Shape extends Entity {
     }
 
     return area;
+  }
+
+  loadMask(mask: string, startX = 0, startY = 0, block = false): Shape {
+    mask = mask.toUpperCase().replace(/[^|\n_0.X1O]/g, "");
+    let x = startX,
+      y = startY;
+
+    for (let ch of mask) {
+      switch (ch) {
+        case "|":
+        case "\n":
+          // Skip to next line
+          if (x > startX) {
+            y++;
+            x = startX;
+          }
+          break;
+
+        case "X":
+        case "1":
+        case "O":
+          // insert a cell
+          if (block) {
+            this.blockCell(x, y);
+          } else {
+            this.allowCell(x, y);
+          }
+          if (x >= this.w) {
+            this.w = x + 1;
+          }
+          if (y >= this.h) {
+            this.h = y + 1;
+          }
+          x++;
+          break;
+
+        case "_":
+        case "0":
+        case ".":
+          // skip a cell
+          if (x >= this.w) {
+            this.w = x + 1;
+          }
+          if (y >= this.h) {
+            this.h = y + 1;
+          }
+          x++;
+          break;
+      }
+    }
+
+    return this;
   }
 
   save(): any {
@@ -134,6 +186,10 @@ export default class Shape extends Entity {
     this.blockedCells.clear();
     for (let cell of data.blockedCells || []) {
       this.blockedCells.add(cell);
+    }
+
+    if (data.mask) {
+      this.loadMask(data.mask);
     }
 
     return super.load(data);

@@ -90,7 +90,7 @@ export default class Entity {
 
   static loadNew(data: any): Entity {
     // Copy the entity if it's already present in the cache
-    let name = data.toString();
+    let name = data.toString() as string;
     if (Entity.allEntities.has(name)) {
       let entity = Entity.allEntities.get(name);
       if (entity) {
