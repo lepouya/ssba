@@ -3,7 +3,7 @@
     "type": "Shape",
     "bgKey": "test-ships",
     "bgFrame": "Ship L",
-    "mask": "|___X___|__XXX__|__XXX__|_XXXXX_|_XXXXX_|_XXXXX_|__XXX__"
+    "mask": "___X___|__XXX__|__XXX__|_XXXXX_|_XXXXX_|_XXXXX_|__XXX__"
   },
   "Small Arrow": {
     "type": "Shape",

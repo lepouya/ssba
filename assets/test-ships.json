@@ -6,36 +6,12 @@
         "y": 0,
         "w": 48,
         "h": 16
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 48,
-        "h": 16
-      },
-      "sourceSize": {
-        "w": 48,
-        "h": 16
       }
     },
     "Shield L": {
       "frame": {
         "x": 224,
         "y": 16,
-        "w": 32,
-        "h": 32
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 32,
-        "h": 32
-      },
-      "sourceSize": {
         "w": 32,
         "h": 32
       }
@@ -46,36 +22,12 @@
         "y": 48,
         "w": 16,
         "h": 48
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 48
-      },
-      "sourceSize": {
-        "w": 16,
-        "h": 48
       }
     },
     "Weapon S": {
       "frame": {
         "x": 160,
         "y": 64,
-        "w": 16,
-        "h": 16
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 16
-      },
-      "sourceSize": {
         "w": 16,
         "h": 16
       }
@@ -86,36 +38,12 @@
         "y": 32,
         "w": 16,
         "h": 16
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 16
-      },
-      "sourceSize": {
-        "w": 16,
-        "h": 16
       }
     },
     "Shield S": {
       "frame": {
         "x": 192,
         "y": 32,
-        "w": 16,
-        "h": 16
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 16,
-        "h": 16
-      },
-      "sourceSize": {
         "w": 16,
         "h": 16
       }
@@ -126,36 +54,12 @@
         "y": 0,
         "w": 112,
         "h": 112
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 112,
-        "h": 112
-      },
-      "sourceSize": {
-        "w": 112,
-        "h": 112
       }
     },
     "Ship S": {
       "frame": {
         "x": 0,
         "y": 128,
-        "w": 64,
-        "h": 64
-      },
-      "rotated": false,
-      "trimmed": false,
-      "spriteSourceSize": {
-        "x": 0,
-        "y": 0,
-        "w": 64,
-        "h": 64
-      },
-      "sourceSize": {
         "w": 64,
         "h": 64
       }
