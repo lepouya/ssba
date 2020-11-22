@@ -1,8 +1,8 @@
-import * as Phaser from 'phaser';
-import ShipObject from './ShipObject';
-import EntityManager from '../model/EntityManager';
-import CameraObject from './CameraObject';
-import Background from './Background';
+import * as Phaser from "phaser";
+import ShipObject from "./ShipObject";
+import EntityManager from "../model/EntityManager";
+import CameraObject from "./CameraObject";
+import Background from "./Background";
 
 export default class Scene extends Phaser.Scene {
   public static scene: Phaser.Scene;
@@ -18,17 +18,18 @@ export default class Scene extends Phaser.Scene {
       width: 800,
       height: 600,
       loader: {
-        path: 'assets',
+        path: "assets",
       },
       physics: {
-        default: 'arcade',
+        default: "arcade",
       },
       scene: Scene.scene,
+      title: "ssba",
     });
   }
 
   static isInitialized() {
-    return (Scene.scene && (Scene.scene as Scene).initialized);
+    return Scene.scene && (Scene.scene as Scene).initialized;
   }
 
   public shipObjects = new Map<string, ShipObject>();
@@ -37,38 +38,38 @@ export default class Scene extends Phaser.Scene {
 
   constructor() {
     super({
-      key: 'Game Scene',
+      key: "Game Scene",
     });
   }
 
   preload() {
     // Load json files
-    this.load.atlas('test-ships');
-    this.load.json('test-data');
-    this.load.image('stars');
+    this.load.atlas("test-ships");
+    this.load.json("test-data");
+    this.load.image("stars");
   }
 
   create() {
-    EntityManager.loadAll(this.cache.json.get('test-data'));
+    EntityManager.loadAll(this.cache.json.get("test-data"));
 
-    let shipS = new ShipObject(this, 'Ship S');
-    let shipL = new ShipObject(this, 'Ship L');
-    this.shipObjects.set('Ship S', shipS);
-    this.shipObjects.set('Ship L', shipL);
-    shipS.setKeys('W', 'S', 'A', 'D');
-    shipL.setKeys('UP', 'DOWN', 'LEFT', 'RIGHT');
+    let shipS = new ShipObject(this, "Ship S");
+    let shipL = new ShipObject(this, "Ship L");
+    this.shipObjects.set("Ship S", shipS);
+    this.shipObjects.set("Ship L", shipL);
+    shipS.setKeys("W", "S", "A", "D");
+    shipL.setKeys("UP", "DOWN", "LEFT", "RIGHT");
 
     this.cameras.main.setBounds(-5000, -5000, 10000, 10000);
     this.cameraObject = new CameraObject(this);
     this.cameraObject!.followObjects.add(shipS.container);
     this.cameraObject!.followObjects.add(shipL.container);
 
-    this.background = new Background(this, 'stars', 10000, 10000);
+    this.background = new Background(this, "stars", 10000, 10000);
     this.initialized = true;
   }
 
   update() {
-    this.shipObjects.forEach(shipObject => shipObject.update());
+    this.shipObjects.forEach((shipObject) => shipObject.update());
     this.cameraObject!.update();
     this.background!.update();
   }
