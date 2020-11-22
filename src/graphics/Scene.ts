@@ -43,7 +43,7 @@ export default class Scene extends Phaser.Scene {
   }
 
   preload() {
-    // Load json files
+    // Load game assets
     this.load.atlas("test-ships");
     this.load.json("test-data");
     this.load.image("stars");
