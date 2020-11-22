@@ -37,7 +37,7 @@ export default class Entity {
 
   update(now = Date.now() / 1000.): number {
     let dt = now - this.lastUpdated;
-    if (dt < 1. / 60.) {
+    if (dt <= 0.) {
       return 0.;
     }
 

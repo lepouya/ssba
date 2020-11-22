@@ -67,10 +67,12 @@ export default class Ship extends Entity {
 
   update(now?: number): number {
     let dt = super.update(now);
-    this.shape.update(now);
     if (dt <= 0.) {
       return 0.;
     }
+
+    this.shape.update(now);
+    this.components.forEach(sc => sc.component.update(now));
 
     this.x += this.dx * dt;
     this.y += this.dy * dt;

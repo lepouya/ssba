@@ -51,7 +51,7 @@ export default class EntityManager {
       return true;
     }
 
-    // Make sure at list minDT has passed before updating entities
+    // Make sure at least minDT has passed before updating entities
     let dt = now - EntityManager.lastUpdate;
     if (dt < EntityManager.minDT) {
       return false;

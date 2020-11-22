@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import Spinner from './Spinner';
-import Game from './Game';
+import Spinner from "./Spinner";
+import Game from "./Game";
 
-import bind from '../utils/bind';
-import Scene from '../graphics/Scene';
+import bind from "../utils/bind";
+import Scene from "../graphics/Scene";
 
 interface LoaderState {
   loaded: boolean;
@@ -38,8 +38,8 @@ export default class Loader extends React.Component<{}, LoaderState> {
   render() {
     if (this.state.loaded) {
       return <Game />;
+    } else {
+      return <Spinner />;
     }
-
-    return <Spinner />
   }
 }

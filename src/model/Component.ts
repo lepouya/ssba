@@ -15,10 +15,11 @@ export default class Component extends Entity {
 
   update(now?: number): number {
     let dt = super.update(now);
-    this.shape.update(now);
     if (dt <= 0.) {
       return 0.;
     }
+
+    this.shape.update(now);
 
     // Nothing to update at the moment
 
