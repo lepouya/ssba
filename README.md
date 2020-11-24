@@ -22,12 +22,12 @@ pew pew
 ### M1: Engines
 
 - ~~Calculation of mass, velocity, CoM, force~~
+- ~~Ship movement and maneuvering under acceleration~~
 - Allow components to have specialized actions
-- Ship movement and maneuvering under acceleration
 - Engines
+- Change user inputs to control the engine power and gimbal
 - Power management
 - Reactors and solar panels
-- Change user inputs to control the engine power and gimbal
 - Power display panel
 
 ### M2: Weapon systems
