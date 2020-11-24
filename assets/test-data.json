@@ -18,8 +18,10 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Weapon S",
-      "w": 1,
-      "h": 1
+      "size": {
+        "w": 1,
+        "h": 1
+      }
     }
   },
   "Shield S": {
@@ -29,8 +31,10 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Shield S",
-      "w": 1,
-      "h": 1
+      "size": {
+        "w": 1,
+        "h": 1
+      }
     }
   },
   "Engine S": {
@@ -40,8 +44,10 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Engine S",
-      "w": 1,
-      "h": 1
+      "size": {
+        "w": 1,
+        "h": 1
+      }
     }
   },
   "Weapon L": {
@@ -51,8 +57,10 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Weapon L",
-      "w": 1,
-      "h": 3
+      "size": {
+        "w": 1,
+        "h": 3
+      }
     }
   },
   "Shield L": {
@@ -62,8 +70,10 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Shield L",
-      "w": 2,
-      "h": 2
+      "size": {
+        "w": 2,
+        "h": 2
+      }
     }
   },
   "Engine L": {
@@ -73,27 +83,35 @@
       "type": "Shape",
       "bgKey": "test-ships",
       "bgFrame": "Engine L",
-      "w": 3,
-      "h": 1
+      "size": {
+        "w": 3,
+        "h": 1
+      }
     }
   },
   "Ship S": {
     "type": "Ship",
     "shape": "Small Arrow",
     "baseMass": 6,
-    "x": 100,
-    "y": 100,
+    "position": {
+      "x": 100,
+      "y": 100
+    },
     "angle": 3.141592,
     "components": [
       {
-        "x": 1,
-        "y": 1,
-        "component": "Weapon L"
+        "component": "Weapon L",
+        "position": {
+          "x": 1,
+          "y": 1
+        }
       },
       {
-        "x": 2,
-        "y": 1,
-        "component": "Weapon L"
+        "component": "Weapon L",
+        "position": {
+          "x": 2,
+          "y": 1
+        }
       }
     ]
   },
@@ -101,19 +119,25 @@
     "type": "Ship",
     "shape": "Large Arrow",
     "baseMass": 35,
-    "x": 400,
-    "y": 300,
+    "position": {
+      "x": 400,
+      "y": 300
+    },
     "angle": 1,
     "components": [
       {
-        "x": 2,
-        "y": 6,
-        "component": "Engine L"
+        "component": "Engine L",
+        "position": {
+          "x": 2,
+          "y": 6
+        }
       },
       {
-        "x": 3,
-        "y": 0,
-        "component": "Shield S"
+        "component": "Shield S",
+        "position": {
+          "x": 3,
+          "y": 0
+        }
       }
     ]
   }

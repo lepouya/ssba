@@ -1,47 +1,42 @@
 import Entity from "./Entity";
+import { Size, Position } from "./Types";
 
 export default class Shape extends Entity {
   static entityTypes = Entity.entityTypes.set("Shape", Shape);
-
-  // Size of each cell
-  public cellW = 16;
-  public cellH = 16;
-
-  // Bounding box is (-w*cellW/2, -h*cellH/2) - (w*cellW/2, h*cellH/2)
-  public w = 0;
-  public h = 0;
 
   // Whitelist and blacklist of all the cells included in this shape
   protected readonly allowedCells = new Set<string>();
   protected readonly blockedCells = new Set<string>();
 
-  // Sprite information
-  public bgKey?: string;
-  public bgFrame?: string;
-
   // TODO: animation
 
-  constructor(id?: string, lastUpdated?: number, type?: string) {
+  constructor(
+    id?: string,
+    lastUpdated?: number,
+    type?: string,
+    // Size of each cell
+    public size: Size = { w: 0, h: 0 },
+    // Bounding box is (-size.w*cellSize.w/2, -size.h*cellSize.h/2) -
+    //                 (+size.w*cellSize.w/2, +size.h*cellSize.h/2)
+    public cellSize: Size = { w: 16, h: 16 },
+    // Sprite information
+    public bgKey?: string,
+    public bgFrame?: string,
+  ) {
     super(id, lastUpdated, type || "Shape");
   }
 
-  setSize(width: number, height: number): Shape {
-    this.w = width;
-    this.h = height;
-    return this;
-  }
-
   // Allow only specific cells on this shape
-  allowCell(x: number, y: number): Shape {
-    let s = `(${x},${y})`; // Sets work really weird with tuple entries
+  allowCell(p: Position): Shape {
+    let s = JSON.stringify(p);
     this.allowedCells.add(s);
     this.blockedCells.delete(s);
     return this;
   }
 
   // Block a cell from being in the shape
-  blockCell(x: number, y: number): Shape {
-    let s = `(${x},${y})`;
+  blockCell(p: Position): Shape {
+    let s = JSON.stringify(p);
     this.allowedCells.delete(s);
     this.blockedCells.add(s);
     return this;
@@ -49,16 +44,16 @@ export default class Shape extends Entity {
 
   // Calculate the total area covered by this shape
   getArea(): number {
-    let baseArea = this.w * this.h,
+    let baseArea = this.size.w * this.size.h,
       whitelist = this.allowedCells.size,
       blacklist = this.blockedCells.size;
     return (whitelist > 0 ? whitelist : baseArea) - blacklist;
   }
 
   // Check if this shape has a cell at x,y
-  hasCell(x: number, y: number): boolean {
-    let s = `(${x},${y})`;
-    if (x >= this.w || y >= this.h || x < 0 || y < 0) {
+  hasCell(p: Position): boolean {
+    let s = JSON.stringify(p);
+    if (p.x >= this.size.w || p.y >= this.size.h || p.x < 0 || p.y < 0) {
       return false;
     } else if (this.blockedCells.has(s)) {
       return false;
@@ -72,14 +67,22 @@ export default class Shape extends Entity {
   }
 
   // Check how much of this shape is covered by another shape
-  collisionArea(other: Shape, dx = 0, dy = 0): number {
+  collisionArea(other: Shape, d: Position): number {
     let area = 0;
 
     // My box is ((0, 0), (w, h)), other box is ((dx, dy), (other.w + dx, other.h + dy))
-    for (let x = Math.max(0, dx); x < Math.min(this.w, other.w + dx); x++) {
-      for (let y = Math.max(0, dy); y < Math.min(this.h, other.h + dy); y++) {
-        if (this.hasCell(x, y)) {
-          if (other.hasCell(x - dx, y - dy)) {
+    for (
+      let x = Math.max(0, d.x);
+      x < Math.min(this.size.w, other.size.w + d.x);
+      x++
+    ) {
+      for (
+        let y = Math.max(0, d.y);
+        y < Math.min(this.size.h, other.size.h + d.y);
+        y++
+      ) {
+        if (this.hasCell({ x, y })) {
+          if (other.hasCell({ x: x - d.x, y: y - d.y })) {
             area++;
           }
         }
@@ -89,19 +92,23 @@ export default class Shape extends Entity {
     return area;
   }
 
-  loadMask(mask: string, startX = 0, startY = 0, block = false): Shape {
+  loadMask(
+    mask: string,
+    start: Position = { x: 0, y: 0 },
+    block = false,
+  ): Shape {
     mask = mask.toUpperCase().replace(/[^|\n_0.X1O]/g, "");
-    let x = startX,
-      y = startY;
+    let x = start.x,
+      y = start.y;
 
     for (let ch of mask) {
       switch (ch) {
         case "|":
         case "\n":
           // Skip to next line
-          if (x > startX) {
+          if (x > start.x) {
             y++;
-            x = startX;
+            x = start.x;
           }
           break;
 
@@ -110,15 +117,15 @@ export default class Shape extends Entity {
         case "O":
           // insert a cell
           if (block) {
-            this.blockCell(x, y);
+            this.blockCell({ x, y });
           } else {
-            this.allowCell(x, y);
+            this.allowCell({ x, y });
           }
-          if (x >= this.w) {
-            this.w = x + 1;
+          if (x >= this.size.w) {
+            this.size.w = x + 1;
           }
-          if (y >= this.h) {
-            this.h = y + 1;
+          if (y >= this.size.h) {
+            this.size.h = y + 1;
           }
           x++;
           break;
@@ -127,11 +134,11 @@ export default class Shape extends Entity {
         case "0":
         case ".":
           // skip a cell
-          if (x >= this.w) {
-            this.w = x + 1;
+          if (x >= this.size.w) {
+            this.size.w = x + 1;
           }
-          if (y >= this.h) {
-            this.h = y + 1;
+          if (y >= this.size.h) {
+            this.size.h = y + 1;
           }
           x++;
           break;
@@ -144,11 +151,8 @@ export default class Shape extends Entity {
   save(): any {
     let res = super.save();
 
-    res.cellW = this.cellW;
-    res.cellH = this.cellH;
-
-    res.w = this.w;
-    res.h = this.h;
+    res.cellSize = this.cellSize;
+    res.size = this.size;
 
     res.bgKey = this.bgKey;
     res.bgFrame = this.bgFrame;
@@ -165,11 +169,8 @@ export default class Shape extends Entity {
   }
 
   load(data: any): Entity {
-    this.cellW = data.cellW || this.cellW;
-    this.cellH = data.cellH || this.cellH;
-
-    this.w = data.w || this.w;
-    this.h = data.h || this.h;
+    this.cellSize = data.cellSize || this.cellSize;
+    this.size = data.size || this.size;
 
     if (data.bgKey) {
       this.bgKey = data.bgKey;

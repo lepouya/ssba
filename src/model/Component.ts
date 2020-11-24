@@ -2,21 +2,24 @@ import Entity from "./Entity";
 import Shape from "./Shape";
 
 export default class Component extends Entity {
-  static entityTypes = Entity.entityTypes.set('Component', Component);
-
-  public mass = 0.;
-  public shape = new Shape();
+  static entityTypes = Entity.entityTypes.set("Component", Component);
 
   // TODO: center of mass
 
-  constructor(id?: string, lastUpdated?: number, type?: string) {
-    super(id, lastUpdated, type || 'Component');
+  constructor(
+    id?: string,
+    lastUpdated?: number,
+    type?: string,
+    public mass = 0,
+    public shape = new Shape(),
+  ) {
+    super(id, lastUpdated, type || "Component");
   }
 
   update(now?: number): number {
     let dt = super.update(now);
-    if (dt <= 0.) {
-      return 0.;
+    if (dt <= 0) {
+      return 0;
     }
 
     this.shape.update(now);

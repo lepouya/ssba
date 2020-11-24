@@ -1,6 +1,6 @@
-import * as Phaser from 'phaser';
-import Ship from '../model/Ship';
-import EntityManager from '../model/EntityManager';
+import * as Phaser from "phaser";
+import Ship from "../model/Ship";
+import EntityManager from "../model/EntityManager";
 
 export default class ShipObject {
   public container: Phaser.GameObjects.Container;
@@ -8,34 +8,52 @@ export default class ShipObject {
 
   constructor(public scene: Phaser.Scene, shipName: string) {
     this.ship = EntityManager.fetch(shipName) as Ship;
-    this.container = scene.add.container(this.ship.x, this.ship.y);
+    this.container = scene.add.container(
+      this.ship.position.x,
+      this.ship.position.y,
+    );
 
     this.container.setDepth(1000);
     this.container.setRotation(this.ship.angle);
 
-    this.container.add(scene.make.sprite({
-      key: this.ship.shape.bgKey,
-      frame: this.ship.shape.bgFrame,
-    }));
-
-    let originX = this.ship.shape.w * this.ship.shape.cellW / 2;
-    let originY = this.ship.shape.h * this.ship.shape.cellH / 2;
-
-    this.ship.components.forEach(sc => this.container.add(
+    this.container.add(
       scene.make.sprite({
-        x: (sc.x + sc.component.shape.w / 2) * sc.component.shape.cellW - originX,
-        y: (sc.y + sc.component.shape.h / 2) * sc.component.shape.cellH - originY,
-        key: sc.component.shape.bgKey,
-        frame: sc.component.shape.bgFrame,
-      })
-    ));
+        key: this.ship.shape.bgKey,
+        frame: this.ship.shape.bgFrame,
+      }),
+    );
+
+    let originX = (this.ship.shape.size.w * this.ship.shape.cellSize.w) / 2;
+    let originY = (this.ship.shape.size.h * this.ship.shape.cellSize.h) / 2;
+
+    this.ship.components.forEach((sc) =>
+      this.container.add(
+        scene.make.sprite({
+          x:
+            (sc.position.x + sc.component.shape.size.w / 2) *
+              sc.component.shape.cellSize.w -
+            originX,
+          y:
+            (sc.position.y + sc.component.shape.size.h / 2) *
+              sc.component.shape.cellSize.h -
+            originY,
+          key: sc.component.shape.bgKey,
+          frame: sc.component.shape.bgFrame,
+        }),
+      ),
+    );
   }
 
   private kAccelerate?: Phaser.Input.Keyboard.Key;
   private kBrake?: Phaser.Input.Keyboard.Key;
   private kLeft?: Phaser.Input.Keyboard.Key;
   private kRight?: Phaser.Input.Keyboard.Key;
-  public setKeys(accelerate: string, brake: string, left: string, right: string) {
+  public setKeys(
+    accelerate: string,
+    brake: string,
+    left: string,
+    right: string,
+  ) {
     this.kAccelerate = this.scene.input.keyboard.addKey(accelerate);
     this.kBrake = this.scene.input.keyboard.addKey(brake);
     this.kLeft = this.scene.input.keyboard.addKey(left);
@@ -74,8 +92,8 @@ export default class ShipObject {
       this.ship.da += 0.01;
     }
 
-    this.container.setX(this.ship.x);
-    this.container.setY(this.ship.y);
+    this.container.setX(this.ship.position.x);
+    this.container.setY(this.ship.position.y);
     this.container.setRotation(this.ship.angle);
     this.container.update();
   }

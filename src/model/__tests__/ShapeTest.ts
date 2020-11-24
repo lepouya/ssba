@@ -4,29 +4,37 @@ import { expect } from "chai";
 import Shape from "../Shape";
 import Entity from "../Entity";
 
-let screen = new Shape("screen", 0).setSize(10, 10);
-let block = new Shape("block", 1).setSize(3, 3);
-let plus = new Shape("plus", 3.14).setSize(3, 3);
-let cross = new Shape("cross", 42).setSize(3, 3);
+let screen = new Shape("screen", 0, undefined, { w: 10, h: 10 });
+let block = new Shape("block", 1, undefined, { w: 3, h: 3 });
+let plus = new Shape("plus", 3.14, undefined, { w: 3, h: 3 });
+let cross = new Shape("cross", 42, undefined, { w: 3, h: 3 });
 
-screen.blockCell(4, 4).blockCell(4, 5).blockCell(5, 4).blockCell(5, 5);
+screen
+  .blockCell({ x: 4, y: 4 })
+  .blockCell({ x: 4, y: 5 })
+  .blockCell({ x: 5, y: 4 })
+  .blockCell({ x: 5, y: 5 });
 
 plus
-  .allowCell(1, 0)
-  .allowCell(0, 1)
-  .allowCell(1, 1)
-  .allowCell(2, 1)
-  .allowCell(1, 2);
+  .allowCell({ x: 1, y: 0 })
+  .allowCell({ x: 0, y: 1 })
+  .allowCell({ x: 1, y: 1 })
+  .allowCell({ x: 2, y: 1 })
+  .allowCell({ x: 1, y: 2 });
 
-cross.blockCell(1, 0).blockCell(1, 2).blockCell(0, 1).blockCell(2, 1);
+cross
+  .blockCell({ x: 1, y: 0 })
+  .blockCell({ x: 1, y: 2 })
+  .blockCell({ x: 0, y: 1 })
+  .blockCell({ x: 2, y: 1 });
 
 describe("Shape properties", () => {
   it("Basic info set up correctly", () => {
-    expect(screen.w).to.equal(10);
-    expect(screen.h).to.equal(10);
+    expect(screen.size.w).to.equal(10);
+    expect(screen.size.h).to.equal(10);
 
-    expect(block.w).to.equal(3);
-    expect(block.h).to.equal(3);
+    expect(block.size.w).to.equal(3);
+    expect(block.size.h).to.equal(3);
   });
 
   it("getArea returns correct size", () => {
@@ -37,31 +45,31 @@ describe("Shape properties", () => {
   });
 
   it("hasCell returns correct info", () => {
-    expect(screen.hasCell(0, 0)).to.be.true;
-    expect(screen.hasCell(1, 0)).to.be.true;
-    expect(screen.hasCell(1, 9)).to.be.true;
-    expect(screen.hasCell(10, 1)).to.be.false;
-    expect(screen.hasCell(4, 4)).to.be.false;
+    expect(screen.hasCell({ x: 0, y: 0 })).to.be.true;
+    expect(screen.hasCell({ x: 1, y: 0 })).to.be.true;
+    expect(screen.hasCell({ x: 1, y: 9 })).to.be.true;
+    expect(screen.hasCell({ x: 10, y: 1 })).to.be.false;
+    expect(screen.hasCell({ x: 4, y: 4 })).to.be.false;
 
-    expect(block.hasCell(0, 0)).to.be.true;
-    expect(block.hasCell(1, 0)).to.be.true;
-    expect(block.hasCell(1, 9)).to.be.false;
-    expect(block.hasCell(10, 1)).to.be.false;
-    expect(block.hasCell(2, 2)).to.be.true;
+    expect(block.hasCell({ x: 0, y: 0 })).to.be.true;
+    expect(block.hasCell({ x: 1, y: 0 })).to.be.true;
+    expect(block.hasCell({ x: 1, y: 9 })).to.be.false;
+    expect(block.hasCell({ x: 10, y: 1 })).to.be.false;
+    expect(block.hasCell({ x: 2, y: 2 })).to.be.true;
 
-    expect(plus.hasCell(0, 0)).to.be.false;
-    expect(plus.hasCell(1, 0)).to.be.true;
-    expect(plus.hasCell(2, 0)).to.be.false;
-    expect(plus.hasCell(3, 0)).to.be.false;
-    expect(plus.hasCell(0, 1)).to.be.true;
-    expect(plus.hasCell(1, 1)).to.be.true;
+    expect(plus.hasCell({ x: 0, y: 0 })).to.be.false;
+    expect(plus.hasCell({ x: 1, y: 0 })).to.be.true;
+    expect(plus.hasCell({ x: 2, y: 0 })).to.be.false;
+    expect(plus.hasCell({ x: 3, y: 0 })).to.be.false;
+    expect(plus.hasCell({ x: 0, y: 1 })).to.be.true;
+    expect(plus.hasCell({ x: 1, y: 1 })).to.be.true;
 
-    expect(cross.hasCell(0, 0)).to.be.true;
-    expect(cross.hasCell(1, 0)).to.be.false;
-    expect(cross.hasCell(2, 0)).to.be.true;
-    expect(cross.hasCell(3, 0)).to.be.false;
-    expect(cross.hasCell(0, 1)).to.be.false;
-    expect(cross.hasCell(1, 1)).to.be.true;
+    expect(cross.hasCell({ x: 0, y: 0 })).to.be.true;
+    expect(cross.hasCell({ x: 1, y: 0 })).to.be.false;
+    expect(cross.hasCell({ x: 2, y: 0 })).to.be.true;
+    expect(cross.hasCell({ x: 3, y: 0 })).to.be.false;
+    expect(cross.hasCell({ x: 0, y: 1 })).to.be.false;
+    expect(cross.hasCell({ x: 1, y: 1 })).to.be.true;
   });
 
   it("hasCell and getArea return same value", () => {
@@ -69,7 +77,7 @@ describe("Shape properties", () => {
       Array.from(Array(12).keys()).reduce(
         (c, x) =>
           Array.from(Array(12).keys()).reduce(
-            (d, y) => d + (s.hasCell(x - 1, y - 1) ? 1 : 0),
+            (d, y) => d + (s.hasCell({ x: x - 1, y: y - 1 }) ? 1 : 0),
             c,
           ),
         0,
@@ -91,47 +99,47 @@ describe("Shape properties", () => {
 
 describe("Shape collisions", () => {
   it("Clean containment", () => {
-    expect(screen.collisionArea(block, 0, 0)).to.equal(9);
-    expect(screen.collisionArea(block, 1, 6)).to.equal(9);
-    expect(screen.collisionArea(block, 6, 6)).to.equal(9);
-    expect(screen.collisionArea(block, 6, 1)).to.equal(9);
+    expect(screen.collisionArea(block, { x: 0, y: 0 })).to.equal(9);
+    expect(screen.collisionArea(block, { x: 1, y: 6 })).to.equal(9);
+    expect(screen.collisionArea(block, { x: 6, y: 6 })).to.equal(9);
+    expect(screen.collisionArea(block, { x: 6, y: 1 })).to.equal(9);
 
-    expect(screen.collisionArea(plus, 0, 0)).to.equal(5);
-    expect(screen.collisionArea(plus, 2, 6)).to.equal(5);
-    expect(screen.collisionArea(plus, 6, 6)).to.equal(5);
-    expect(screen.collisionArea(plus, 6, 2)).to.equal(5);
+    expect(screen.collisionArea(plus, { x: 0, y: 0 })).to.equal(5);
+    expect(screen.collisionArea(plus, { x: 2, y: 6 })).to.equal(5);
+    expect(screen.collisionArea(plus, { x: 6, y: 6 })).to.equal(5);
+    expect(screen.collisionArea(plus, { x: 6, y: 2 })).to.equal(5);
 
-    expect(screen.collisionArea(cross, 0, 0)).to.equal(5);
-    expect(screen.collisionArea(cross, 0, 6)).to.equal(5);
-    expect(screen.collisionArea(cross, 6, 6)).to.equal(5);
-    expect(screen.collisionArea(cross, 6, 0)).to.equal(5);
+    expect(screen.collisionArea(cross, { x: 0, y: 0 })).to.equal(5);
+    expect(screen.collisionArea(cross, { x: 0, y: 6 })).to.equal(5);
+    expect(screen.collisionArea(cross, { x: 6, y: 6 })).to.equal(5);
+    expect(screen.collisionArea(cross, { x: 6, y: 0 })).to.equal(5);
 
-    expect(block.collisionArea(plus, 0, 0)).to.equal(5);
-    expect(block.collisionArea(cross, 0, 0)).to.equal(5);
+    expect(block.collisionArea(plus, { x: 0, y: 0 })).to.equal(5);
+    expect(block.collisionArea(cross, { x: 0, y: 0 })).to.equal(5);
   });
 
   it("Partial containment", () => {
-    expect(screen.collisionArea(block, -1, 0)).to.equal(6);
-    expect(screen.collisionArea(plus, 9, 0)).to.equal(1);
-    expect(screen.collisionArea(cross, 0, 9)).to.equal(2);
+    expect(screen.collisionArea(block, { x: -1, y: 0 })).to.equal(6);
+    expect(screen.collisionArea(plus, { x: 9, y: 0 })).to.equal(1);
+    expect(screen.collisionArea(cross, { x: 0, y: 9 })).to.equal(2);
 
-    expect(block.collisionArea(plus, -1, 0)).to.equal(4);
-    expect(block.collisionArea(cross, 2, 2)).to.equal(1);
+    expect(block.collisionArea(plus, { x: -1, y: 0 })).to.equal(4);
+    expect(block.collisionArea(cross, { x: 2, y: 2 })).to.equal(1);
   });
 
   it("Not contained", () => {
-    expect(screen.collisionArea(block, -5, 10)).to.equal(0);
-    expect(block.collisionArea(plus, 2, 2)).to.equal(0);
-    expect(plus.collisionArea(cross, 2, 0)).to.equal(0);
+    expect(screen.collisionArea(block, { x: -5, y: 10 })).to.equal(0);
+    expect(block.collisionArea(plus, { x: 2, y: 2 })).to.equal(0);
+    expect(plus.collisionArea(cross, { x: 2, y: 0 })).to.equal(0);
   });
 
   it("Partial collision", () => {
-    expect(screen.collisionArea(block, 4, 4)).to.equal(5);
-    expect(screen.collisionArea(plus, 4, 4)).to.equal(2);
-    expect(screen.collisionArea(cross, 5, 5)).to.equal(4);
+    expect(screen.collisionArea(block, { x: 4, y: 4 })).to.equal(5);
+    expect(screen.collisionArea(plus, { x: 4, y: 4 })).to.equal(2);
+    expect(screen.collisionArea(cross, { x: 5, y: 5 })).to.equal(4);
 
-    expect(cross.collisionArea(plus, 0, 0)).to.equal(1);
-    expect(plus.collisionArea(cross, 1, 0)).to.equal(3);
+    expect(cross.collisionArea(plus, { x: 0, y: 0 })).to.equal(1);
+    expect(plus.collisionArea(cross, { x: 1, y: 0 })).to.equal(3);
   });
 });
 
@@ -162,8 +170,7 @@ describe("Mask loading", () => {
       |_________|\
       |.........|\
       ",
-      1,
-      1,
+      { x: 1, y: 1 },
       true,
     );
     expect(newScreen).to.deep.equal(screen);
