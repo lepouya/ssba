@@ -179,3 +179,59 @@ describe("Ship and component placement", () => {
     expect(ship.components.size).to.equal(3);
   });
 });
+
+describe("Ship mass and acceleration", () => {
+  let ship: Ship;
+  let c1a: Component;
+  let c1b: Component;
+  let c2a: Component;
+  let c2b: Component;
+  let c3: Component;
+
+  beforeEach("Setup ship and components", () => {
+    ship = new Ship("ship", undefined, undefined, 10, arrow);
+    c1a = new Component("c1a", undefined, undefined, 1, blockS);
+    c1b = new Component("c1b", undefined, undefined, 1, blockS);
+    c2a = new Component("c2a", undefined, undefined, 2, blockM);
+    c2b = new Component("c2b", undefined, undefined, 2, blockM);
+    c3 = new Component("c3", undefined, undefined, 5, blockL);
+
+    arrow.center = { x: 0.5, y: 0.5 };
+    blockS.center = { x: 0.5, y: 0.5 };
+    blockM.center = { x: 0.5, y: 0.5 };
+    blockL.center = { x: 0.5, y: 0.5 };
+  });
+
+  it("base center of mass with no components", () => {
+    expect(ship.getCenterOfMass()).to.deep.equal({ x: 40, y: 64 });
+  });
+
+  it("lowered ship center of mass", () => {
+    ship.shape.center = { x: 2.5 / 5, y: 2.5 / 8 };
+    expect(ship.getCenterOfMass()).to.deep.equal({ x: 40, y: 40 });
+  });
+
+  it("center of mass with one component", () => {
+    expect(ship.placeComponent(c3, { x: 1, y: 0 })).to.be.true;
+    expect(ship.getCenterOfMass().x).to.equal(40);
+    expect(ship.getCenterOfMass().y).to.be.approximately(50.666, 0.01);
+  });
+
+  it("symmetric center of mass", () => {
+    expect(ship.placeComponent(c2a, { x: 0, y: 0 })).to.be.true;
+    expect(ship.placeComponent(c2b, { x: 3, y: 0 })).to.be.true;
+    expect(ship.placeComponent(c1a, { x: 2, y: 6 })).to.be.true;
+    expect(ship.placeComponent(c1b, { x: 2, y: 7 })).to.be.true;
+    expect(ship.getCenterOfMass().x).to.be.approximately(40, 0.01);
+    expect(ship.getCenterOfMass().y).to.be.approximately(58, 0.01);
+  });
+
+  it("asymmetric center of mass", () => {
+    expect(ship.placeComponent(c3, { x: 0, y: 0 })).to.be.true;
+    expect(ship.placeComponent(c2a, { x: 1, y: 4 })).to.be.true;
+    expect(ship.placeComponent(c1a, { x: 4, y: 1 })).to.be.true;
+    expect(ship.placeComponent(c1b, { x: 2, y: 7 })).to.be.true;
+    expect(ship.getCenterOfMass().x).to.be.approximately(36.632, 0.01);
+    expect(ship.getCenterOfMass().y).to.be.approximately(56, 0.01);
+  });
+});

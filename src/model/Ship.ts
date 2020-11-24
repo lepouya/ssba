@@ -6,8 +6,6 @@ import { Angle, Position } from "./Types";
 export default class Ship extends Entity {
   static entityTypes = Entity.entityTypes.set("Ship", Ship);
 
-  public baseMass = 0;
-
   public dx = 0;
   public dy = 0;
   public da = 0;
@@ -20,12 +18,11 @@ export default class Ship extends Entity {
     }
   >();
 
-  // TODO: center of mass
-
   constructor(
     id?: string,
     lastUpdated?: number,
     type?: string,
+    public baseMass = 0,
     public shape = new Shape(),
     public position: Position = { x: 0, y: 0 },
     public angle: Angle = 0,
@@ -38,6 +35,26 @@ export default class Ship extends Entity {
     return Array.from(this.components.values()).reduce(
       (mass, sc) => mass + sc.component.mass,
       this.baseMass,
+    );
+  }
+
+  // Get the center of mass of ship + components
+  getCenterOfMass(): Position {
+    let totalMass = this.getTotalMass();
+    let baseCoM = this.shape.getCenterPosition();
+
+    return Array.from(this.components.values()).reduce(
+      (CoM, sc) => {
+        let componentCoM = sc.component.shape.getCenterPosition(sc.position);
+        return {
+          x: CoM.x + componentCoM.x * (sc.component.mass / totalMass),
+          y: CoM.y + componentCoM.y * (sc.component.mass / totalMass),
+        };
+      },
+      {
+        x: baseCoM.x * (this.baseMass / totalMass),
+        y: baseCoM.y * (this.baseMass / totalMass),
+      },
     );
   }
 

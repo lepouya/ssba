@@ -16,14 +16,23 @@ export default class Shape extends Entity {
     type?: string,
     // Size of each cell
     public size: Size = { w: 0, h: 0 },
-    // Bounding box is (-size.w*cellSize.w/2, -size.h*cellSize.h/2) -
-    //                 (+size.w*cellSize.w/2, +size.h*cellSize.h/2)
+    // Pixel size of each cell in this shape
     public cellSize: Size = { w: 16, h: 16 },
+    // Center of shape as a ratio within the bounding box
+    public center: Position = { x: 0.5, y: 0.5 },
     // Sprite information
     public bgKey?: string,
     public bgFrame?: string,
   ) {
     super(id, lastUpdated, type || "Shape");
+  }
+
+  // Calculate this shape's center after offesting by the given cells
+  getCenterPosition(offset: Position = { x: 0, y: 0 }): Position {
+    return {
+      x: (offset.x + this.center.x * this.size.w) * this.cellSize.w,
+      y: (offset.y + this.center.y * this.size.h) * this.cellSize.h,
+    };
   }
 
   // Allow only specific cells on this shape
@@ -153,6 +162,7 @@ export default class Shape extends Entity {
 
     res.cellSize = this.cellSize;
     res.size = this.size;
+    res.center = this.center;
 
     res.bgKey = this.bgKey;
     res.bgFrame = this.bgFrame;
@@ -171,6 +181,7 @@ export default class Shape extends Entity {
   load(data: any): Entity {
     this.cellSize = data.cellSize || this.cellSize;
     this.size = data.size || this.size;
+    this.center = data.center || this.center;
 
     if (data.bgKey) {
       this.bgKey = data.bgKey;

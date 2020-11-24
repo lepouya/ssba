@@ -1,10 +1,15 @@
 import * as Phaser from "phaser";
-import Ship from "../model/Ship";
+import * as Helpers from "./Helpers";
 import EntityManager from "../model/EntityManager";
+import { Position } from "../model/Types";
+import Shape from "../model/Shape";
+import Ship from "../model/Ship";
 
 export default class ShipObject {
   public container: Phaser.GameObjects.Container;
   public ship: Ship;
+
+  private marker: Phaser.GameObjects.Container;
 
   constructor(public scene: Phaser.Scene, shipName: string) {
     this.ship = EntityManager.fetch(shipName) as Ship;
@@ -13,33 +18,32 @@ export default class ShipObject {
       this.ship.position.y,
     );
 
-    this.container.setDepth(1000);
+    this.container.setDepth(1);
     this.container.setRotation(this.ship.angle);
 
-    this.container.add(
-      scene.make.sprite({
-        key: this.ship.shape.bgKey,
-        frame: this.ship.shape.bgFrame,
-      }),
+    this.addShape(scene, this.ship.shape);
+    this.ship.components.forEach((sc) =>
+      this.addShape(scene, sc.component.shape, sc.position),
     );
 
-    let originX = (this.ship.shape.size.w * this.ship.shape.cellSize.w) / 2;
-    let originY = (this.ship.shape.size.h * this.ship.shape.cellSize.h) / 2;
+    this.marker = Helpers.drawCross(scene, 0xffffff);
+  }
 
-    this.ship.components.forEach((sc) =>
-      this.container.add(
-        scene.make.sprite({
-          x:
-            (sc.position.x + sc.component.shape.size.w / 2) *
-              sc.component.shape.cellSize.w -
-            originX,
-          y:
-            (sc.position.y + sc.component.shape.size.h / 2) *
-              sc.component.shape.cellSize.h -
-            originY,
-          key: sc.component.shape.bgKey,
-          frame: sc.component.shape.bgFrame,
-        }),
+  private addShape(scene: Phaser.Scene, shape: Shape, position?: Position) {
+    let origin = this.ship.getCenterOfMass();
+    let pos = shape.getCenterPosition(position);
+    this.container.add(
+      scene.make.sprite({
+        x: pos.x - origin.x,
+        y: pos.y - origin.y,
+        key: shape.bgKey,
+        frame: shape.bgFrame,
+      }),
+    );
+    this.container.add(
+      Helpers.drawCross(scene, 0xff00ff).setPosition(
+        pos.x - origin.x,
+        pos.y - origin.y,
       ),
     );
   }
@@ -96,5 +100,7 @@ export default class ShipObject {
     this.container.setY(this.ship.position.y);
     this.container.setRotation(this.ship.angle);
     this.container.update();
+
+    this.marker.setPosition(this.ship.position.x, this.ship.position.y);
   }
 }

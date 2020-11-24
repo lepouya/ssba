@@ -4,8 +4,6 @@ import Shape from "./Shape";
 export default class Component extends Entity {
   static entityTypes = Entity.entityTypes.set("Component", Component);
 
-  // TODO: center of mass
-
   constructor(
     id?: string,
     lastUpdated?: number,
