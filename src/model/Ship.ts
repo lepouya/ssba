@@ -43,7 +43,7 @@ export default class Ship extends Entity {
 
     return Array.from(this.components.values()).reduce(
       (CoM, sc) => {
-        let componentCoM = sc.component.shape.getCenterPosition(sc.position);
+        let componentCoM = sc.component.getCenterOfMass(sc.position);
         return {
           x: CoM.x + componentCoM.x * (sc.component.mass / totalMass),
           y: CoM.y + componentCoM.y * (sc.component.mass / totalMass),
@@ -66,6 +66,7 @@ export default class Ship extends Entity {
     // 1) Check if it it's already in components, remove it
     if (this.components.has(component.id)) {
       this.components.delete(component.id);
+      component.parent = undefined;
     }
 
     // 2) Check to see it fits in the ship
@@ -87,6 +88,7 @@ export default class Ship extends Entity {
 
     // 4) Place
     this.components.set(component.id, { component, position });
+    component.parent = this;
 
     return true;
   }

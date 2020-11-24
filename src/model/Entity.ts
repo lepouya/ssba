@@ -8,9 +8,9 @@ export default class Entity {
     // Unique identifier for this entity
     public readonly id = Math.random().toString(36).substr(2, 9),
     // Last time vectors were calculated, [s]
-    public lastUpdated: number = Date.now() / 1000.,
+    public lastUpdated: number = Date.now() / 1000,
     // Type of this entity
-    public readonly type = 'Entity',
+    public readonly type = "Entity",
   ) {
     this.name = id;
   }
@@ -24,7 +24,7 @@ export default class Entity {
       this._parent.children.delete(this);
     }
 
-    if (parent && (parent != this)) {
+    if (parent && parent != this) {
       this._parent = parent;
     } else {
       this._parent = undefined;
@@ -35,13 +35,13 @@ export default class Entity {
     }
   }
 
-  update(now = Date.now() / 1000.): number {
+  update(now = Date.now() / 1000): number {
     let dt = now - this.lastUpdated;
-    if (dt <= 0.) {
-      return 0.;
+    if (dt <= 0) {
+      return 0;
     }
 
-    this.children.forEach(entity => entity.update(now));
+    this.children.forEach((entity) => entity.update(now));
     this.lastUpdated = now;
     return dt;
   }
@@ -56,12 +56,7 @@ export default class Entity {
     res.name = this.name;
 
     if (this.children.size > 0) {
-      res.children = Array.from(this.children)
-        .map(child => child.save());
-    }
-
-    if (this.parent) {
-      res.parent = this.parent.id;
+      res.children = Array.from(this.children).map((child) => child.save());
     }
 
     return res;
@@ -85,8 +80,7 @@ export default class Entity {
   }
 
   static allEntities = new Map<string, Entity>();
-  static entityTypes = new Map<string, typeof Entity>()
-    .set('Entity', Entity);
+  static entityTypes = new Map<string, typeof Entity>().set("Entity", Entity);
 
   static loadNew(data: any): Entity {
     // Copy the entity if it's already present in the cache
@@ -100,7 +94,7 @@ export default class Entity {
       }
     }
 
-    let entityType = Entity.entityTypes.get(data.type || 'Entity') || Entity;
+    let entityType = Entity.entityTypes.get(data.type || "Entity") || Entity;
     let entity = new entityType(data.id, data.updated, data.type);
 
     return entity.load(data);

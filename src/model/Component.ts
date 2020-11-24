@@ -1,5 +1,6 @@
 import Entity from "./Entity";
 import Shape from "./Shape";
+import { Position } from "./Types";
 
 export default class Component extends Entity {
   static entityTypes = Entity.entityTypes.set("Component", Component);
@@ -12,6 +13,10 @@ export default class Component extends Entity {
     public shape = new Shape(),
   ) {
     super(id, lastUpdated, type || "Component");
+  }
+
+  getCenterOfMass(position: Position = { x: 0, y: 0 }): Position {
+    return this.shape.getCenterPosition(position);
   }
 
   update(now?: number): number {

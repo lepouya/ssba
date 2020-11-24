@@ -89,6 +89,7 @@ describe("Ship properties", () => {
       .set("c1", { position: { x: 1, y: 3 }, component: c1 })
       .set("c2", { position: { x: 4, y: 5 }, component: c2 })
       .set("c3", { position: { x: 9, y: 4 }, component: c3 });
+    c1.parent = c2.parent = c3.parent = ship;
 
     expect(Entity.loadNew(ship.save())).to.deep.equal(ship);
   });
