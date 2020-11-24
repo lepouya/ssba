@@ -1,14 +1,10 @@
 import Entity from "./Entity";
 import Component from "./Component";
 import Shape from "./Shape";
-import { Angle, Position } from "./Types";
+import { PolarVector, Position } from "./Types";
 
 export default class Ship extends Entity {
   static entityTypes = Entity.entityTypes.set("Ship", Ship);
-
-  public dx = 0;
-  public dy = 0;
-  public da = 0;
 
   public readonly components = new Map<
     string,
@@ -25,7 +21,9 @@ export default class Ship extends Entity {
     public baseMass = 0,
     public shape = new Shape(),
     public position: Position = { x: 0, y: 0 },
-    public angle: Angle = 0,
+    public angle: number = 0,
+    public velocity: Position = { x: 0, y: 0 },
+    public rotationSpeed: number = 0,
   ) {
     super(id, lastUpdated, type || "Ship");
   }
@@ -93,6 +91,35 @@ export default class Ship extends Entity {
     return true;
   }
 
+  addVelocity(velocity: PolarVector): Ship {
+    this.velocity.x += Math.sin(velocity.angle) * velocity.size;
+    this.velocity.y -= Math.cos(velocity.angle) * velocity.size;
+
+    return this;
+  }
+
+  applyForce(place: Position, force: PolarVector, dt: number): Ship {
+    let mass = this.getTotalMass(),
+      CoM = this.getCenterOfMass(),
+      baseCoM = this.shape.getCenterPosition();
+
+    // The change in velocity happens as if the force was applied to center
+    this.addVelocity({ size: (force.size / mass) * dt, angle: force.angle });
+
+    // Angular momentum is the cross product (place - center) X force
+    let torque =
+      (place.x - CoM.x) * (force.size * -Math.cos(force.angle - this.angle)) -
+      (place.y - CoM.y) * (force.size * Math.sin(force.angle - this.angle));
+    // Moment of intertia is sum of all particles (mass * distance^2)
+    // We'll just estimate this using the radius of the ship shape
+    let I_c = mass * baseCoM.x ** 2 + baseCoM.y ** 2;
+
+    // The angular acceleration is torque / I_c
+    this.rotationSpeed += (torque / I_c) * dt;
+
+    return this;
+  }
+
   update(now?: number): number {
     let dt = super.update(now);
     if (dt <= 0) {
@@ -102,9 +129,9 @@ export default class Ship extends Entity {
     this.shape.update(now);
     this.components.forEach((sc) => sc.component.update(now));
 
-    this.position.x += this.dx * dt;
-    this.position.y += this.dy * dt;
-    this.angle += this.da * dt;
+    this.position.x += this.velocity.x * dt;
+    this.position.y += this.velocity.y * dt;
+    this.angle += this.rotationSpeed * dt;
 
     return dt;
   }
@@ -117,9 +144,8 @@ export default class Ship extends Entity {
     res.position = this.position;
     res.angle = this.angle;
 
-    res.dx = this.dx;
-    res.dy = this.dy;
-    res.da = this.da;
+    res.velocity = this.velocity;
+    res.rotationSpeed = this.rotationSpeed;
 
     res.shape = this.shape.save();
 
@@ -141,9 +167,8 @@ export default class Ship extends Entity {
     this.position = data.position || this.position;
     this.angle = data.angle || this.angle;
 
-    this.dx = data.dx || this.dx;
-    this.dy = data.dy || this.dy;
-    this.da = data.da || this.da;
+    this.velocity = data.velocity || this.velocity;
+    this.rotationSpeed = data.rotationSpeed || this.rotationSpeed;
 
     if (data.shape) {
       this.shape = Entity.loadNew(data.shape) as Shape;

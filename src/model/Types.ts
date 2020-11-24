@@ -8,4 +8,7 @@ export type Position = {
   y: number;
 };
 
-export type Angle = number;
+export type PolarVector = {
+  size: number;
+  angle: number;
+};
