@@ -31,6 +31,8 @@
   },
   "devDependencies": {
     "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
     "@types/chai": "*",
     "@types/mocha": "*",
     "@types/node": "*",
@@ -39,8 +41,6 @@
     "@types/react-router": "*",
     "@types/react-router-dom": "*",
     "@types/uikit": "*",
-    "@babel/preset-env": "*",
-    "@babel/preset-react": "*",
     "babelify": "*",
     "browserify": "*",
     "chai": "*",
