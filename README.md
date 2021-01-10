@@ -51,3 +51,5 @@ pew pew
 - Warp drives
 - Fleets
 - Autonomous missiles
+- Ship and Component leveling
+- Sprite animations
