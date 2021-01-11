@@ -114,6 +114,7 @@ export default class Ship extends Entity {
       (place.y - CoM.y) * (force.size * Math.sin(force.angle - this.angle));
     // Moment of intertia is sum of all particles (mass * distance^2)
     // We'll just estimate this using the radius of the ship shape
+    // TODO: Maybe calculation of total mass should do this per component?
     let I_c = mass * baseCoM.x ** 2 + baseCoM.y ** 2;
 
     // The angular acceleration is torque / I_c

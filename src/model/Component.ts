@@ -15,8 +15,8 @@ export default class Component extends Entity {
     super(id, lastUpdated, type || "Component");
   }
 
-  getCenterOfMass(position: Position = { x: 0, y: 0 }): Position {
-    return this.shape.getCenterPosition(position);
+  getCenterOfMass(offset: Position = { x: 0, y: 0 }): Position {
+    return this.shape.getCenterPosition(offset);
   }
 
   update(now?: number): number {
