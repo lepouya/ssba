@@ -23,8 +23,8 @@ pew pew
 
 - ~~Calculation of mass, velocity, CoM, force~~
 - ~~Ship movement and maneuvering under acceleration~~
+- ~~Engines~~
 - Allow components to have specialized actions
-- Engines
 - Change user inputs to control the engine power and gimbal
 - Power management
 - Reactors and solar panels

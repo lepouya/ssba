@@ -9,8 +9,8 @@ export default class Component extends Entity {
     id?: string,
     lastUpdated?: number,
     type?: string,
-    public mass = 0,
     public shape = new Shape(),
+    public mass = 0,
   ) {
     super(id, lastUpdated, type || "Component");
   }
@@ -27,7 +27,7 @@ export default class Component extends Entity {
 
     this.shape.update(now);
 
-    // Nothing to update at the moment
+    // Specialized components to override their own update actions
 
     return dt;
   }

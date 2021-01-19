@@ -190,12 +190,12 @@ describe("Ship mass and acceleration", () => {
   let c3: Component;
 
   beforeEach("Setup ship and components", () => {
-    ship = new Ship("ship", undefined, undefined, 10, arrow);
-    c1a = new Component("c1a", undefined, undefined, 1, blockS);
-    c1b = new Component("c1b", undefined, undefined, 1, blockS);
-    c2a = new Component("c2a", undefined, undefined, 2, blockM);
-    c2b = new Component("c2b", undefined, undefined, 2, blockM);
-    c3 = new Component("c3", undefined, undefined, 5, blockL);
+    ship = new Ship("ship", undefined, undefined, arrow, 10);
+    c1a = new Component("c1a", undefined, undefined, blockS, 1);
+    c1b = new Component("c1b", undefined, undefined, blockS, 1);
+    c2a = new Component("c2a", undefined, undefined, blockM, 2);
+    c2b = new Component("c2b", undefined, undefined, blockM, 2);
+    c3 = new Component("c3", undefined, undefined, blockL, 5);
 
     arrow.center = { x: 0.5, y: 0.5 };
     blockS.center = { x: 0.5, y: 0.5 };

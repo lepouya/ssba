@@ -9,6 +9,6 @@ export type Position = {
 };
 
 export type PolarVector = {
-  size: number;
+  magnitude: number;
   angle: number;
 };

@@ -40,12 +40,13 @@ export default class ShipObject {
         frame: shape.bgFrame,
       }),
     );
-    this.container.add(
-      Helpers.drawCross(scene, 0xff00ff).setPosition(
-        pos.x - origin.x,
-        pos.y - origin.y,
-      ),
-    );
+    if (shape.size.h > 1 || shape.size.w > 1)
+      this.container.add(
+        Helpers.drawCross(scene, 0xff00ff).setPosition(
+          pos.x - origin.x,
+          pos.y - origin.y,
+        ),
+      );
   }
 
   private kAccelerate?: Phaser.Input.Keyboard.Key;
@@ -83,13 +84,11 @@ export default class ShipObject {
       }
     }
 
-    let CoM = this.ship.getCenterOfMass();
-
     if (this.kAccelerate && this.kAccelerate.isDown) {
       // this.ship.addVelocity({ size: 1, angle: this.ship.angle });
       this.ship.applyForce(
-        { x: CoM.x, y: CoM.y + 40 },
-        { size: 500, angle: this.ship.angle },
+        { x: 0, y: 40 },
+        { magnitude: 500, angle: 0 },
         1 / 60,
       );
     }
@@ -97,8 +96,8 @@ export default class ShipObject {
     if (this.kLeft && this.kLeft.isDown) {
       // this.ship.rotationSpeed -= 0.01;
       this.ship.applyForce(
-        { x: CoM.x, y: CoM.y + 40 },
-        { size: 250, angle: this.ship.angle + Math.PI / 2 },
+        { x: 0, y: 40 },
+        { magnitude: 250, angle: Math.PI / 2 },
         1 / 60,
       );
     }
@@ -106,8 +105,8 @@ export default class ShipObject {
     if (this.kRight && this.kRight.isDown) {
       // this.ship.rotationSpeed += 0.01;
       this.ship.applyForce(
-        { x: CoM.x, y: CoM.y + 40 },
-        { size: 250, angle: this.ship.angle - Math.PI / 2 },
+        { x: 0, y: 40 },
+        { magnitude: 250, angle: -Math.PI / 2 },
         1 / 60,
       );
     }

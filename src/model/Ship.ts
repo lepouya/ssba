@@ -18,8 +18,8 @@ export default class Ship extends Entity {
     id?: string,
     lastUpdated?: number,
     type?: string,
-    public baseMass = 0,
     public shape = new Shape(),
+    public baseMass = 0,
     public position: Position = { x: 0, y: 0 },
     public angle: number = 0,
     public velocity: Position = { x: 0, y: 0 },
@@ -93,25 +93,40 @@ export default class Ship extends Entity {
     return true;
   }
 
+  getComponentPosition(component: Component): Position | undefined {
+    return this.components.get(component.id)?.position;
+  }
+
+  static getComponentPosition(component: Component): Position | undefined {
+    if (component.parent instanceof Ship) {
+      return (component.parent as Ship).getComponentPosition(component);
+    } else {
+      return undefined;
+    }
+  }
+
   addVelocity(velocity: PolarVector): Ship {
-    this.velocity.x += Math.sin(velocity.angle) * velocity.size;
-    this.velocity.y -= Math.cos(velocity.angle) * velocity.size;
+    this.velocity.x += Math.sin(velocity.angle) * velocity.magnitude;
+    this.velocity.y -= Math.cos(velocity.angle) * velocity.magnitude;
 
     return this;
   }
 
+  // Apply force relative to the current position and heading of the ship
   applyForce(place: Position, force: PolarVector, dt: number): Ship {
     let mass = this.getTotalMass(),
-      CoM = this.getCenterOfMass(),
       baseCoM = this.shape.getCenterPosition();
 
     // The change in velocity happens as if the force was applied to center
-    this.addVelocity({ size: (force.size / mass) * dt, angle: force.angle });
+    this.addVelocity({
+      magnitude: (force.magnitude / mass) * dt,
+      angle: force.angle + this.angle,
+    });
 
-    // Angular momentum is the cross product (place - center) X force
+    // Angular momentum is the cross product place X force
     let torque =
-      (place.x - CoM.x) * (force.size * -Math.cos(force.angle - this.angle)) -
-      (place.y - CoM.y) * (force.size * Math.sin(force.angle - this.angle));
+      place.x * (force.magnitude * -Math.cos(force.angle)) -
+      place.y * (force.magnitude * Math.sin(force.angle));
     // Moment of intertia is sum of all particles (mass * distance^2)
     // We'll just estimate this using the radius of the ship shape
     // TODO: Maybe calculation of total mass should do this per component?
@@ -121,6 +136,16 @@ export default class Ship extends Entity {
     this.rotationSpeed += (torque / I_c) * dt;
 
     return this;
+  }
+
+  // Apply force with position and angle relative to the world origin
+  applyForceAbsolute(place: Position, force: PolarVector, dt: number): Ship {
+    let CoM = this.getCenterOfMass();
+    return this.applyForce(
+      { x: place.x - CoM.x, y: place.y - CoM.y },
+      { magnitude: force.magnitude, angle: force.angle - this.angle },
+      dt,
+    );
   }
 
   update(now?: number): number {

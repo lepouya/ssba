@@ -38,8 +38,11 @@
     }
   },
   "Engine S": {
-    "type": "Component",
+    "type": "EngineComponent",
     "mass": 1,
+    "thrustLimit": 200,
+    "gimbalLimit": 1.6,
+    "rcsPower": 25,
     "shape": {
       "type": "Shape",
       "bgKey": "test-ships",
@@ -77,8 +80,11 @@
     }
   },
   "Engine L": {
-    "type": "Component",
+    "type": "EngineComponent",
     "mass": 3,
+    "thrustLimit": 800,
+    "gimbalLimit": 0.8,
+    "rcsPower": 100,
     "shape": {
       "type": "Shape",
       "bgKey": "test-ships",
@@ -107,10 +113,17 @@
         }
       },
       {
-        "component": "Weapon L",
+        "component": "Shield S",
         "position": {
           "x": 2,
           "y": 1
+        }
+      },
+      {
+        "component": "Engine S",
+        "position": {
+          "x": 2,
+          "y": 3
         }
       }
     ]
