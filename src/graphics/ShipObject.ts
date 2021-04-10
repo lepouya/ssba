@@ -67,34 +67,30 @@ export default class ShipObject {
 
   update() {
     if (this.kBrake && this.kBrake.isDown) {
-      this.ship.velocity.x *= 0.95;
-      this.ship.velocity.y *= 0.95;
-      this.ship.rotationSpeed *= 0.95;
+      this.ship.setAction("changeSpeed", 0);
 
-      if (Math.abs(this.ship.velocity.x) <= 0.05) {
+      this.ship.velocity.x *= 0.9;
+      this.ship.velocity.y *= 0.9;
+      this.ship.rotationSpeed *= 0.9;
+
+      if (Math.abs(this.ship.velocity.x) <= 1) {
         this.ship.velocity.x = 0;
       }
 
-      if (Math.abs(this.ship.velocity.y) <= 0.05) {
+      if (Math.abs(this.ship.velocity.y) <= 1) {
         this.ship.velocity.y = 0;
       }
 
-      if (Math.abs(this.ship.rotationSpeed) <= 0.05) {
+      if (Math.abs(this.ship.rotationSpeed) <= 1) {
         this.ship.rotationSpeed = 0;
       }
     }
 
     if (this.kAccelerate && this.kAccelerate.isDown) {
-      // this.ship.addVelocity({ size: 1, angle: this.ship.angle });
-      this.ship.applyForce(
-        { x: 0, y: 40 },
-        { magnitude: 500, angle: 0 },
-        1 / 60,
-      );
+      this.ship.setAction("changeSpeed", this.ship.speed + 100);
     }
 
     if (this.kLeft && this.kLeft.isDown) {
-      // this.ship.rotationSpeed -= 0.01;
       this.ship.applyForce(
         { x: 0, y: 40 },
         { magnitude: 250, angle: Math.PI / 2 },
@@ -103,7 +99,6 @@ export default class ShipObject {
     }
 
     if (this.kRight && this.kRight.isDown) {
-      // this.ship.rotationSpeed += 0.01;
       this.ship.applyForce(
         { x: 0, y: 40 },
         { magnitude: 250, angle: -Math.PI / 2 },

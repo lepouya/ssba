@@ -1,9 +1,13 @@
 import Entity from "./Entity";
 import Shape from "./Shape";
+import Ship from "./Ship";
 import { Position } from "./Types";
 
 export default class Component extends Entity {
   static entityTypes = Entity.entityTypes.set("Component", Component);
+
+  public readonly allowedActions = new Set<string>();
+  protected actions = new Map<string, any>();
 
   constructor(
     id?: string,
@@ -19,6 +23,21 @@ export default class Component extends Entity {
     return this.shape.getCenterPosition(offset);
   }
 
+  setAction(action: string, params: any): Component {
+    if (this.allowedActions.has(action)) {
+      this.actions.set(action, params);
+    }
+
+    return this;
+  }
+
+  protected performAction(
+    _ship: Ship,
+    _place: Position,
+    _action: string,
+    _params: any,
+  ): void {}
+
   update(now?: number): number {
     let dt = super.update(now);
     if (dt <= 0) {
@@ -28,6 +47,14 @@ export default class Component extends Entity {
     this.shape.update(now);
 
     // Specialized components to override their own update actions
+    let place = Ship.getComponentPosition(this);
+    if (this.parent instanceof Ship && place !== undefined) {
+      this.actions.forEach((param, action) =>
+        param !== null && param !== undefined
+          ? this.performAction(this.parent! as Ship, place!, action, param)
+          : param,
+      );
+    }
 
     return dt;
   }
