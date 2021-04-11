@@ -68,6 +68,7 @@ export default class ShipObject {
   update() {
     if (this.kBrake && this.kBrake.isDown) {
       this.ship.setAction("changeSpeed", 0);
+      this.ship.setAction("changeHeading", this.ship.angle);
 
       this.ship.velocity.x *= 0.9;
       this.ship.velocity.y *= 0.9;
@@ -91,19 +92,11 @@ export default class ShipObject {
     }
 
     if (this.kLeft && this.kLeft.isDown) {
-      this.ship.applyForce(
-        { x: 0, y: 40 },
-        { magnitude: 250, angle: Math.PI / 2 },
-        1 / 60,
-      );
+      this.ship.setAction("changeHeading", this.ship.angle - Math.PI / 10);
     }
 
     if (this.kRight && this.kRight.isDown) {
-      this.ship.applyForce(
-        { x: 0, y: 40 },
-        { magnitude: 250, angle: -Math.PI / 2 },
-        1 / 60,
-      );
+      this.ship.setAction("changeHeading", this.ship.angle + Math.PI / 10);
     }
 
     this.container.setX(this.ship.position.x);

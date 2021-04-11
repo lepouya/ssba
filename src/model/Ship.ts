@@ -128,9 +128,6 @@ export default class Ship extends Entity {
     let mass = this.getTotalMass(),
       baseCoM = this.shape.getCenterPosition();
 
-    // let v0 = this.getVelocity();
-    // let a0 = this.rotationSpeed;
-
     // The change in velocity happens as if the force was applied to center
     this.addVelocity({
       magnitude: (force.magnitude / mass) * dt,
@@ -148,25 +145,6 @@ export default class Ship extends Entity {
 
     // The angular acceleration is torque / I_c
     this.rotationSpeed += (torque / I_c) * dt;
-
-    // let v1 = this.getVelocity();
-    // let a1 = this.rotationSpeed;
-    // console.log(
-    //   "F=(%d,%d°)@(%d,%d), M=%d@(%d,%d), V=(%d,%d°)=>(%d,%d°), A=%.1f°=>%.1f°",
-    //   force.magnitude,
-    //   (force.angle * 180) / Math.PI,
-    //   place.x,
-    //   place.y,
-    //   mass,
-    //   baseCoM.x,
-    //   baseCoM.y,
-    //   v0.magnitude,
-    //   (v0.angle * 180) / Math.PI,
-    //   v1.magnitude,
-    //   (v1.angle * 180) / Math.PI,
-    //   (a0 * 180) / Math.PI,
-    //   (a1 * 180) / Math.PI,
-    // );
 
     return this;
   }

@@ -4,7 +4,9 @@ import Shape from "./Shape";
 import Ship from "./Ship";
 import { PolarVector, Position } from "./Types";
 
-const TOLERANCE = 1;
+const SPEED_TOLERANCE = 0.1;
+const ANGLE_TOLERANCE = 0.001;
+const DAMPEN = 0.9;
 
 export default class EngineComponent extends Component {
   static entityTypes = Entity.entityTypes.set(
@@ -40,31 +42,60 @@ export default class EngineComponent extends Component {
     action: string,
     params: any,
   ): void {
+    let m = ship.getTotalMass();
+
     switch (action) {
       case "changeHeading":
+        let a1 = params as number;
+        let a0 = ship.angle;
+        let dA = a1 - a0;
+
+        let vA1 = (a1 - a0) * DAMPEN;
+        let vA0 = ship.rotationSpeed;
+        let dVA = vA1 - vA0;
+
+        this.power.magnitude = Math.min(
+          this.thrustLimit,
+          Math.max(ANGLE_TOLERANCE, Math.abs(dVA)) * m * 1000,
+        );
+
+        if (dVA > ANGLE_TOLERANCE) {
+          // Rotate clockwise
+          this.power.angle = -Math.PI / 2;
+        } else if (dVA < -ANGLE_TOLERANCE) {
+          // Rotate counterclockwise
+          this.power.angle = Math.PI / 2;
+        } else {
+          // Turn off the engines and coast
+          this.power.magnitude = 0;
+          if (Math.abs(dA) < ANGLE_TOLERANCE) {
+            // Target achieved
+            this.actions.set(action, null);
+          }
+        }
+
         break;
 
       case "changeSpeed":
-        let targetSpeed = params as number;
-        let currentSpeed = ship.speed;
-        let dV = targetSpeed - currentSpeed;
-        let m = ship.getTotalMass();
+        let v0 = ship.speed;
+        let v1 = params as number;
+        let dV = v1 - v0;
 
-        if (dV > TOLERANCE) {
+        this.power.magnitude = Math.min(
+          this.thrustLimit,
+          Math.max(SPEED_TOLERANCE, Math.abs(dV)) * m * DAMPEN,
+        );
+
+        if (dV > SPEED_TOLERANCE) {
           // Speed up
-          this.power = {
-            magnitude: Math.max(TOLERANCE, Math.min(this.thrustLimit, dV * m)),
-            angle: 0,
-          };
-        } else if (dV < -TOLERANCE) {
+          this.power.angle = 0;
+        } else if (dV < -SPEED_TOLERANCE) {
           // Slow down
-          this.power = {
-            magnitude: Math.max(TOLERANCE, Math.min(this.thrustLimit, dV * m)),
-            angle: Math.PI,
-          };
+          this.power.angle = Math.PI;
         } else {
           // Turn off the engines
-          this.power = { magnitude: 0, angle: 0 };
+          this.power.magnitude = 0;
+          // Target achieved
           this.actions.set(action, null);
         }
 
