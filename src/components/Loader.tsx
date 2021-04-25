@@ -16,7 +16,7 @@ export default class Loader extends React.Component<{}, LoaderState> {
     this.state = { loaded: false };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.state.loaded) {
       setTimeout(this.load, 1);
     }
